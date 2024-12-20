@@ -1,0 +1,136 @@
+﻿
+    <br />
+    <center><h3>Solicitud Hardware</h3></center>
+    <br />
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <center>
+                    <h5>Tipo de solicitud</h5>
+                    <select class="form-control" id="tipo_solicitud">
+                        <option value="1">Asignación</option>
+                        <option value="2">Préstamo</option>
+                    </select>
+                </center>
+            </div>
+            <div class="col-lg-4">
+            </div>
+            <div class="col-lg-4">
+                <center>
+                    <h5>Fecha requerida</h5>
+                    <input type="date" class="form-control" id="fecha_requerida" />
+                </center>
+            </div>
+        </div>
+        <br />
+        <table class="table table-hover" style="text-align:center">
+            <thead style="background: #8572C6; color: #ffffff; ">
+                <tr>
+                    <th scope="col">Tipo de dispositivos</th>
+                    <th scope="col">Cantidad</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Laptop y Cargador</td>
+                    <td><select class="form-control" id="laptop">
+                            <option value="0" default>0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Escanner</td>
+                    <td>
+                        <select class="form-control" id="escanners">
+                            <option value="0" default>0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Impresoras WIFI</td>
+                    <td>
+                        <select class="form-control" id="impresoras">
+                            <option value="0" default>0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <h5>Comentarios</h5>
+        <br />
+        <textarea id="comentarios" rows="2" cols="140"></textarea>
+        <br />
+        <br />
+        <h5>La asignación y/o préstamo esta sujeta a disponibilidad del departamento de IT </h5>
+        <button type="button" onclick="Loan_Equipment()" class="btn btn-default " style="background: #7ED957; color: #ffffff; ">Solicitar</button>
+       
+    </div>
+
+<script>
+    $(document).ready(function () {
+        Detalles_hardware_loan();
+    });
+    /*-------------------------------------DETALLE DE SOLICITUDES X' USUARIO-----------------------------------------------*/
+    
+    function Loan_Equipment() {
+
+        var laptop = $('#laptop').val();
+        var escanners = $('#escanners').val();
+        var impresoras = $('#impresoras').val();
+        var comments = $('#comentarios').val();
+        var fecha_requerida = $('#fecha_requerida').val();
+        var tipo_solicitud = $('#tipo_solicitud').val();
+        $.ajax({
+            url: "/siixsem_it/Add_Loan_Equipment",
+                        type: "POST",
+                        data: {
+                            laptop: laptop,
+                            escanners: escanners,
+                            impresoras: impresoras,
+                            comments: comments,
+                            fecha_requerida: fecha_requerida,
+                            tipo_solicitud: tipo_solicitud
+                        },
+                        cache: false,
+                        beforeSend:
+                            function (cargando) {
+                                //$("#loader").show();
+                                //document.getElementById("btnAdd").disabled = true;
+                            },
+                        success: function (result) {
+                            //$("#loader").hide();
+                            alertify.notify('¡Se añadio dispositivo al inventario con éxito!', 'success', 1, function () { location.reload(); });
+
+                        },
+
+                        error: function (errormessage) {
+                            alertify.error('Upss... Ocurrio un error comunicate al departamento de IT ¡Gracias!');
+                            //document.getElementById("btnAdd").disabled = false;
+                        }
+                    });
+                }
+</script>

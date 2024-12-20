@@ -1,0 +1,94 @@
+﻿@{
+    if (Session["type_user"].ToString() == "Administrador")
+    {
+        <div class="container">
+            <br /><br />
+            <center>
+                <h2>Detalle de Factura</h2>
+                <hr style="background-color: #dc3545;  width:5%;  border-width: 2px; color: white;" />
+            </center>
+            <br /><br />
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <center><h6 for="Facturas">Numero de Factura</h6></center>
+                                <input type="text" class="form-control" id="id" style="background:#e9ecef;" value="@ViewBag.idinv" readonly/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <center>
+                        <div class="table100">
+                            <div class="wrap-table100">
+                                <table class="table tab-content">
+                                    <thead>
+                                        <tr class="row_table header" style="color: white; background: #8572C6; font-size: 15px; ">
+                                            <th> <center>Nombre del equipo</center></th>
+                                            <th> <center>Numero de Serie</center></th>
+                                            <th> <center>Fecha de adquisición</center> </th>
+                                            <th> <center>Marca</center> </th>
+                                            <th> <center>Estatus </center> </th>
+                                        </tr>
+                                    </thead>
+                                    <bold>
+                                        <tbody class="tbody5" style="color:#666666;  font-size:15px;"></tbody>
+                                    </bold>
+                                </table>
+                            </div>
+                        </div>
+                    </center>
+                </div>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function () {
+                all_invoices();
+            });
+            /*-------------------------------------TABLA DE EQUIPOS ASIGNADOS-----------------------------------------------*/
+            function all_invoices() {
+                var id = $('#id').val();
+                $.ajax({
+                    url: "/siixsem_it/Get_DetailsInvoice",
+                    type: "POST",
+                    data: {
+                        id_invoice : id
+                    },
+                    cache: false,
+                    beforeSend:
+                        function (cargando) {
+                        },
+                    success:
+                        function (result) {
+                            var html = '';
+                            $.each(result, function (key, item) {
+
+                                html += '<tr class="fila row_table" id="fila">';
+                                html += '<td><center>' + item.id_eq + '</center></td>';
+                                html += '<td><center>' + item.series + '</center></td>';
+                                html += '<td></td>';
+                                html += '<td></td>';
+                                html += '</tr>';
+                            });
+                            $('.tbody5').html(html);
+                        },
+
+                    error: function (errormessage) {
+                        alertify.error('Upss... Ocurrio un error comunicate al departamento de IT ¡Gracias!');
+                    }
+                });
+
+            }
+        </script>
+    }
+    else
+    {
+        <script type="text/javascript">
+            window.location = "/Home/Index";
+        </script>
+    }
+}

@@ -1,0 +1,537 @@
+﻿
+<body style="font-family: 'Montserrat', sans-serif; font-size:small;">
+
+    <br>
+    <center>
+        <h1> Inventario Equipos </h1>
+        <hr width="50%">
+    </center>
+    <br><br>
+        <div class=" row">
+            <div class="col-sm-1">
+                <center>
+                    <a class="btn btn-default form-control" style="color: white; background: #86CF53;" onclick="fnExcelReport();" id="btnExport">
+                        <span class="fa fa-file-excel-o" width="50%"></span>
+                    </a>
+                </center>
+            </div>
+            <div class="col-sm-1">
+                <center>
+                    <a class="btn btn-default form-control" style="color:white; background:#5ab8ff;">
+                        <span class="fa fa-search" width="50%"></span>
+                    </a>
+                </center>
+            </div>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" id="Search" placeholder="Search" />
+            </div>
+            <div class="col-sm-6"></div>
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-primary  fa fa-plus" data-toggle="modal" data-target="#myModal"></button>
+            </div>
+
+        </div>
+        <br />
+        <h5>Filtros</h5>
+        <br />
+        <div class=" row">
+            <div class="col-sm-3">
+                <select class="form-control" onchange="Buscar()" id="combobox_search">
+                    <option value="0">Tipo de dispositivo</option>
+                    <option value="4">Equipos de Escritorio</option>
+                    @*<option value="6">Escanner Lineas</option>*@
+                    <option value="1">Laptops</option>
+                    <option value="3">Monitores</option>
+                    <option value="7">PDA</option>
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <select class="form-control" onchange="Buscar()" id="combobox_department">
+                    <option value="0">Departamento</option>
+                    <option value="1">IT</option>
+                    <option value="2">Produccion SMT</option>
+                    <option value="3">Mantenimiento SMT</option>
+                    <option value="4">Facilities</option>
+                    <option value="5">Quality</option>
+                    <option value="6">Ingenieria</option>
+                    <option value="7">RH</option>
+                    <option value="8">Warehouse</option>
+                    <option value="9">Compras indirectas</option>
+                    <option value="10">Finanzas</option>
+                    <option value="11">Planeación</option>
+                    <option value="12">Mantenimiento ASSY</option>
+                    <option value="14">Supply Chain</option>
+                    <option value="15">Produccion Ensamble</option>
+                    <option value="16">System & Software</option>
+                    <option value="17">Compras Directas</option>
+                    <option value="18">Ventas</option>
+                    <option value="19">EHS</option>
+                    <option value="20">Staff Japones</option>
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <select class="form-control" onchange="Buscar()" id="combobox_status">
+                    <option value="">Estado</option>
+                    <option value="Asignado">Asignado</option>
+                    <option value="Disponible">Disponible</option>
+                    <option value="Entregado">Entregado</option>
+                    <option value="En preparación">En preparación</option>
+                    <option value="Resguardo IT">Resguardo IT</option>
+                    <option value="Obsoleto">Obsoleto</option>
+                    <option value="Baja">Baja</option>
+                    <option value="EXTRAVIADO">Extravido</option>
+                </select>
+            </div>
+        </div>
+    <br><br>
+        <div>
+            <table class="table-striped tab-content" id="table" style="">
+                <thead>
+                    <tr class="row_table header" style="color:white; background:#5271FF;">
+                        <th><center>Nombre Equipo</center></th>
+                        <th><center>Marca</center></th>
+                        <th><center>Serial</center></th>
+                        <th><center>Modelo</center></th>
+                        <th><center>Departamento</center></th>
+                        <th><center>Ubicación</center></th>
+                        <th><center>Estatus</center></th>
+                        @*<th><center>Garantía</center></th>*@
+                        <th><center>Tipo Dispositivo</center></th>
+                        @*<th><center>Procesador</center></th>
+                        <th><center>Almacenamiento</center></th>
+                        <th><center>Tipo de Disco</center></th>
+                        <th><center>Memoria RAM</center></th>*@
+                        <th><center>Comentarios</center></th>
+                        <th><center>Detalles</center></th>
+                        <th><center>Historicos</center></th>
+                    </tr>
+                </thead>
+                <tbody class="tbody" style="color:#666666;" id="tabla"></tbody>
+            </table>
+        </div>
+        <!-- The Modal Agregar nuevo Equipo -->
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Añadir Dispositivo</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="container">
+                            <table class="table table-striped" id="table_add">
+                                <thead>
+                                    <tr class="row_table header" style="color:white; background:#5271FF;">
+                                        <th><center>Tipo de Dispositivo</center></th>
+                                        <th><center>No. Serie</center></th>
+                                        <th><center>Marca</center></th>
+                                        <th><center>Modelo</center></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table_body" style="color:#666666;" id="table_body">
+                                    <tr>
+                                        <td>
+                                            <select name="id_description_equipment_0" id="id_description_equipment_0" class="form-control"></select>
+
+                                        </td>
+                                        <td>
+                                            <input class="form-control" id="series_0" name="series" />
+                                        </td>
+                                        <td>
+                                            <select id="brad_0" name="brad" class="form-control">
+                                                <option value="Dell">Dell</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select id="model_0" name="model" class="form-control">
+                                                <option value="Latitud 3420">Latitud 3420</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+                            <br />
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p>Personalizar SEM</p>
+                                    <div class="row">
+                                        <div class="col-sm-1"><input type="checkbox" id="id_check" class="form-checkbox"></div>
+                                        <div class="col-sm-10"><input type="number" class="form-control" id="sem" name="sem" /></div>
+                                    </div>
+
+
+
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="">Terminación de garantía</label>
+                                    <input type="date" class="form-control" id="warranty" name="warranty" />
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="">Departamento Comprador</label>
+                                    <select name="buyer" id="buyer" class="form-control"></select>
+                                </div>
+                            </div>
+                            <div class="div_estatus" id="div_estatus">
+                                <br /><center><h5> Estatus Dispositivo</h5></center>
+                                <div class="row">
+
+                                    <div class="col-md-4">
+                                        <label for="">Estatus</label>
+                                        <select id="status" class="form-control">
+                                            <option value="Entregado">Entregado</option>
+                                            <option value="En preparación">En preparación</option>
+                                            <option value="Resguardo IT">Resguardo IT</option>
+                                            <option value="Obsoleto">Obsoleto</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="">Ubicación</label>
+                                        <select id="ubicacion" class="form-control">
+                                            <option value="Almacen IT">Almacen IT</option>
+                                            <option value="Con usuario">Con usuario</option>
+                                            <option value="Oficina IT">Oficina IT</option>
+                                            <option value="Site 1">Site 1</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="div_details" id="div_details">
+                                <center><h5> Caracteristicas</h5></center>
+                                <div class="row" id="details_row">
+                                    <div class="col-md-3">
+                                        <label for="">Procesador</label>
+                                        <select name="procesador" id="procesador" class="form-control"></select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="">Memoria Ram</label>
+                                        <select name="ram" id="ram" class="form-control"></select>
+
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="">Tipo de Disco</label>
+                                        <select name="" id="type_disk" class="form-control"></select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="">Almacenamiento</label>
+                                        <select name="" id="almacenamiento" class="form-control"></select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="">Clave Bitlocker</label>
+                                    <br>
+                                    <textarea id="bitlocker" name="bitlocker" rows="1" cols="60"></textarea>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="">No. Activo Fijo</label>
+                                    <br>
+                                    <textarea id="fixed_active" name="fixed_active" rows="1" cols="60"></textarea>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="">Comentarios</label>
+                                    <br>
+                                    <textarea id="comments" name="comments" rows="4" cols="50"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success butsave" id="butsave" name="butsave" onclick="Add_Equipment()">Save</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- The Modal details -->
+        <div class="modal fade" id="edit_equipment">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content ">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Detalles Equipo</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="datos"></div>
+
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" onclick="Update_equipment()">Save</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        <!-- The Modal historico -->
+        <div class="modal fade" id="hist_equipment">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content ">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Historico del Equipo</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <table class="table table-striped" id="table">
+                            <thead>
+                                <tr class="row_table header" style="color:white; background:#5271FF;">
+                                    <th><center>Usuarios</center></th>
+                                    <th><center>No. nómina</center></th>
+                                    <th><center>Estatus</center></th>
+                                    <th><center>Carta Responsiva</center></th>
+                                </tr>
+                            </thead>
+                            <tbody class="tbody_histo" style="color:#666666;" id="tabla"></tbody>
+                        </table>
+
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+</body>
+    <script src="~/Scripts/siixsem_it.js"></script>
+    <script>
+        function Buscar() {
+
+            var x = document.getElementById("combobox_search").value;
+            var dep = document.getElementById("combobox_department").value;
+            var stat = document.getElementById("combobox_status").value;
+
+            $.ajax({
+                url: "/siixsem_it/GetMaster_List",
+                type: "POST",
+                data: {
+                    id_code_e: x,
+                    id_department: dep,
+                    e_status: stat
+                },
+                cache: false,
+                beforeSend:
+                    function (cargando) {
+                        $("#cargando").show();
+                        //document.getElementById("btnAdd").disabled = true;
+                    },
+                success: function (result) {
+                    var html = '';
+                    var html2 = '';
+
+                    if (x == "0" | x == null | x == "1" | x == "4") {
+                        html2 += '<tr class="row_table header" style="color:white; background:#5271FF;">' +
+                            '<th> <center>Nombre Equipo</center></th >' +
+                            '<th><center>Marca</center></th>' +
+                            '<th><center>Serial</center></th>' +
+                            '<th><center>Modelo</center></th>' +
+                            '<th><center>Departamento</center></th>' +
+                            '<th><center>Ubicación</center></th>' +
+                            '<th><center>Estatus</center></th>' +
+                            //'<th><center>Fecha Adquisición</center></th>' +
+                            //'<th><center>Inicio Garantía</center></th>' +
+                           // '<th><center>Vencimiento Garantía</center></th>' +
+                            //'<th><center>Duracion de Garantía</center></th>' +
+                            '<th><center>Tipo Dispositivo</center></th>' +
+                            //'<th><center>Procesador</center></th>' +
+                            //'<th><center>Almacenamiento</center></th>' +
+                            //'<th><center>Tipo de Disco</center></th>' +
+                            //'<th><center>Memoria RAM</center></th>' +
+                            '<th><center>Comentarios</center></th>' +
+                            //'<th><center>Mac Address</center></th>' +
+                            '<th><center>Detalles</center></th>' +
+                            '<th><center>Historicos</center></th>' +
+                            '</tr>';
+                    }
+                    if (x == "3") {
+                        html2 += '<tr class="row_table header" style="color:white; background:#5271FF;">' +
+                            '<th> <center>Nombre Equipo</center></th >' +
+                            '<th><center>Marca</center></th>' +
+                            '<th><center>Serial</center></th>' +
+                            '<th><center>Modelo</center></th>' +
+                            '<th><center>Departamento</center></th>' +
+                            '<th><center>Ubicación</center></th>' +
+                            '<th><center>Estatus</center></th>' +
+                            //'<th><center>Garantía</center></th>' +
+                            '<th><center>Tipo Dispositivo</center></th>' +
+                            '<th><center>Comentarios</center></th>' +
+                            '<th><center>Detalles</center></th>' +
+                            '<th><center>Historicos</center></th>' +
+                            '</tr>';
+                    }
+                    if (x == "7") {
+                        html2 += '<tr class="row_table header" style="color:white; background:#5271FF;">' +
+                            '<th> <center>Nombre Equipo</center></th >' +
+                            '<th><center>Marca</center></th>' +
+                            '<th><center>Serial</center></th>' +
+                            '<th><center>Modelo</center></th>' +
+                            '<th><center>Departamento</center></th>' +
+                            '<th><center>Ubicación</center></th>' +
+                            '<th><center>Estatus</center></th>' +
+                            '<th><center>Comentarios</center></th>' +
+                            //'<th><center>Mac</center></th>' +
+                            '<th><center>Detalles</center></th>' +
+                            '<th><center>Historicos</center></th>' +
+                            '</tr>';
+                    }
+                    if (x == "6") {
+                        html2 += '<tr class="row_table header" style="color:white; background:#5271FF;">' +
+                            '<th> <center>Nombre Equipo</center></th >' +
+                            '<th><center>ID</center></th>' +
+                            '<th><center>Serial</center></th>' +
+                            '<th><center>Etiqueta Laser</center></th>' +
+                            '<th><center>Comentarios</center></th>' +
+                            //'<th><center>Linea</center></th>' +
+                            '<th><center>Estatus</center></th>' +
+                            '<th><center>Marca</center></th>' +
+                            '<th><center>Modelo</center></th>'
+                        '</tr>';
+                    }
+                    $.each(result, function (key, item) {
+                        if (x == "0" | x == null | x == "1" | x == "4") {
+
+
+                            html += '<tr class="fila row_table" id="fila">';
+                            html += '<td><center>' + item.e_name + '-' + item.id_eq + '</center></td>';
+                            html += '<td><center>' + item.brand + '</center></td>';
+                            html += '<td><center>' + item.series + '</center></td>';
+                            html += '<td><center>' + item.model_name + '</center></td>';
+                            html += '<td><center>' + item.name_dep + '</center></td>';
+                            html += '<td><center>' + item.ubication + '</center></td>';
+                            html += '<td><center>' + item.e_status + '</center></td>';
+                            //html += '<td><center>' + item.fecha_adquisicion + '</center></td>';
+
+                            //html += '<td><center>' + item.inicio_garantia + '</center></td>';
+                            //html += '<td><center>' + item.warranty + '</center></td>';
+                            //if (item.dias_garantia_disponible > 10) {
+                            //    html += '<td><center>' + item.dias_garantia_disponible + ' Días</center></td>';
+                            //} else {
+                            //    html += '<td><center>' + item.dias_garantia_disponible + ' Día</center></td>';
+                            //}
+
+                            html += '<td><center>' + item.cod_description + '</center></td>';
+                            //html += '<td><center>' + item.name_procesador + '</center></td>';
+                            //html += '<td><center>' + item.characteristic1 + '</center></td>';
+                            //html += '<td><center>' + item.characteristic2 + '</center></td>';
+                            //html += '<td><center>' + item.characteristic3 + '</center></td>';
+                            html += '<td><center>' + item.comments + '</center></td>';
+                            //html += '<td><center>' + item.mac_address + '</center></td>';
+                            html += '<td><button type="button" class="btn btn-default  fa fa-pencil" data-toggle="modal" data-target="#edit_equipment" style="background:#ffde59; " onclick="return getbyID_Details_E(' + item.id + ')"></button></td>';
+                            html += '<td><button type="button" class="btn btn-default  fa fa-bars" data-toggle="modal" data-target="#hist_equipment" style="background:#FF738E; " onclick="return getbyHistoryc_Equip(' + item.id + ')"></button></td>';
+                            html += '</tr>';
+                        }
+                        if (x == "3") {
+
+
+                            html += '<tr class="fila row_table" id="fila">';
+                            html += '<td><center>' + item.e_name + '-' + item.id_eq + '</center></td>';
+                            html += '<td><center>' + item.brand + '</center></td>';
+                            html += '<td><center>' + item.series + '</center></td>';
+                            html += '<td><center>' + item.model_name + '</center></td>';
+                            html += '<td><center>' + item.name_dep + '</center></td>';
+                            html += '<td><center>' + item.ubication + '</center></td>';
+                            html += '<td><center>' + item.e_status + '</center></td>';
+                            //html += '<td><center>' + item.warranty + '</center></td>';
+                            html += '<td><center>' + item.cod_description + '</center></td>';
+                            html += '<td><center>' + item.comments + '</center></td>';
+                            html += '<td><button type="button" class="btn btn-default  fa fa-pencil" data-toggle="modal" data-target="#edit_equipment" style="background:#ffde59; " onclick="return getbyID_Details_E(' + item.id + ')"></button></td>';
+                            html += '<td><button type="button" class="btn btn-default  fa fa-bars" data-toggle="modal" data-target="#hist_equipment" style="background:#FF738E; " onclick="return getbyHistoryc_Equip(' + item.id + ')"></button></td>';
+                            html += '</tr>';
+                        }
+                        if (x == "7") {
+                            html += '<tr class="fila row_table" id="fila">';
+                            html += '<td><center>' + item.e_name + '-' + item.id_eq + '</center></td>';
+                            html += '<td><center>' + item.brand + '</center></td>';
+                            html += '<td><center>' + item.series + '</center></td>';
+                            html += '<td><center>' + item.model_name + '</center></td>';
+                            html += '<td><center>' + item.name_dep + '</center></td>';
+                            html += '<td><center>' + item.ubication + '</center></td>';
+                            html += '<td><center>' + item.e_status + '</center></td>';
+                            html += '<td><center>' + item.cod_description + '</center></td>';
+                            html += '<td><center>' + item.comments + '</center></td>';
+                            //html += '<td><center>' + item.mac_address + '</center></td>';
+                            html += '<td><button type="button" class="btn btn-default  fa fa-pencil" data-toggle="modal" data-target="#edit_equipment" style="background:#ffde59; " onclick="return getbyID_Details_E(' + item.id + ')"></button></td>';
+                            html += '<td><button type="button" class="btn btn-default  fa fa-bars" data-toggle="modal" data-target="#hist_equipment" style="background:#FF738E; " onclick="return getbyHistoryc_Equip(' + item.id + ')"></button></td>';
+                            html += '</tr>';
+                        }
+                        //if (x == "6") {
+
+                        //    html += '<tr class="fila row_table" id="fila">';
+                        //    html += '<td><center>' + item.id + '</center></td>';
+                        //    html += '<td><center>' + item.series + '</center></td>';
+                        //    html += '<td><center>' + item.etiqueta_laser + '</center></td>';
+                        //    html += '<td><center>' + item.comentarios + '</center></td>';
+                        //    html += '<td><center>' + item.linea + '</center></td>';
+                        //    html += '<td><center>' + item.e_status + '</center></td>';
+                        //    html += '<td><center>' + item.brand + '</center></td>';
+                        //    html += '<td><center>' + item.model_name + '</center></td>';
+                        //    html += '</tr>';
+
+                        //}
+                        /*else {
+
+
+                             html += '<tr class="fila row_table" id="fila">';
+                            html += '<td><center>' + item.e_name + '-' + item.id_eq + '</center></td>';
+                            html += '<td><center>' + item.brand + '</center></td>';
+                            html += '<td><center>' + item.series + '</center></td>';
+                            html += '<td><center>' + item.model_name + '</center></td>';
+                            html += '<td><center>' + item.name_dep + '</center></td>';
+                            html += '<td><center>' + item.ubication + '</center></td>';
+                            html += '<td><center>' + item.e_status + '</center></td>';
+                            html += '<td><center>' + item.warranty + '</center></td>';
+                            html += '<td><center>' + item.cod_description + '</center></td>';
+                            html += '<td><center>' + item.name_procesador + '</center></td>';
+                            html += '<td><center>' + item.characteristic1 + '</center></td>';
+                            html += '<td><center>' + item.characteristic2 + '</center></td>';
+                            html += '<td><center>' + item.characteristic3 + '</center></td>';
+                            html += '<td><center>' + item.comments + '</center></td>';
+                            html += '<td><button type="button" class="btn btn-default  fa fa-pencil" data-toggle="modal" data-target="#edit_equipment" style="background:#ffde59; " onclick="return getbyID_Details_E(' + item.id + ')"></button></td>';
+                            html += '<td><button type="button" class="btn btn-default  fa fa-bars" data-toggle="modal" data-target="#hist_equipment" style="background:#FF738E; " onclick="return getbyHistoryc_Equip(' + item.id + ')"></button></td>';
+                            html += '</tr>';
+                        }*/
+
+                    });
+                    $('.tbody').html(html);
+                    $('.thead').html(html2);
+                    $("#cargando").hide();
+                },
+
+                error: function (errormessage) {
+                    alertify.error('Upss... Ocurrio un error comunicate al departamento de IT ¡Gracias!');
+                    //document.getElementById("btnAdd").disabled = false;
+                }
+            });
+        }
+    </script>
+
+

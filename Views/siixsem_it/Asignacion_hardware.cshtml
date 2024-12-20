@@ -1,0 +1,136 @@
+﻿<br />
+<center><h3>Asignación de Hardware</h3></center>
+<br />
+<div class="table-responsive" style="">
+    
+    <table class="table table-hover" style="text-align:center;width:3000px; ">
+        <thead style="background: #FF738E; color: #FFFFFF; font-size:12px;">
+            <tr>
+                <th scope="col"># Solicitud</th>
+                <!--th scope="col">Laptops</!--th>
+    <th scope="col">Escanner</th>
+    <th scope="col">Impresoras WIFI</th-->
+                <th scope="col">Tipo solicitud</th>
+                <th scope="col">Usuario solicitante</th>
+                <!--th scope="col">Usuario presto IT</!--th>
+    <th scope="col">Usuario que entrego</th>
+    <th scope="col">Usuario recibio IT</th-->
+                <th scope="col">Fecha de Solicitud</th>
+                <th scope="col">Fecha de Requerida</th>
+                <!--th scope="col">Fecha de Devolución</!--th>-->
+                <th scope="col">Comentarios</th>
+                <th scope="col">Estatus</th>
+                <th scope="col">Detalles</th>
+            </tr>
+        </thead>
+        <tbody class="tbody" style="color:#666666;font-size:12px;" id="tbody" ></tbody>
+    </table>
+    
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        Detalles_hardware_loan();
+        Get_EquipDisp();
+    });
+    /*-------------------------------------DETALLE DE SOLICITUDES X' USUARIO-----------------------------------------------*/
+    function Detalles_hardware_loan() {
+        $.ajax({
+            url: "/siixsem_it/Get_Solicitudes_Harware",
+            //data: JSON.stringify(empObj),
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success:
+                function (result) {
+                    var html = '';
+                    $.each(result, function (key, item) {
+
+                        html += '<tr class="fila row_table" id="fila">';
+                        html += '<td><center>' + item.id  + '</center></td>';
+                        /*html += '<td><center>' + item.laptop + '</center></td>';
+                        html += '<td><center>' + item.escanners + '</center></td>';
+                        html += '<td><center>' + item.impresoras + '</center></td>';*/
+                        html += '<td><center>' + item.tipo_solicitud + '</center></td>';
+                       html += '<td><center>' + item.id_user_solicitante + '</center></td>';
+                     /*    html += '<td><center>' + item.id_user_presto_it + '</center></td>';
+                        html += '<td><center>' + item.id_user_entrega + '</center></td>';
+                        html += '<td><center>' + item.id_user_recibio_it + '</center></td>';*/
+                        html += '<td><center>' + item.fecha_que_solicitan + '</center></td>';
+                        /*html += '<td><center>' + item.fecha_que_se_presta + '</center></td>';*/
+                        html += '<td><center>' + item.fecha_requerida + '</center></td>';
+                        html += '<td><center>' + item.comments + '</center></td>';
+                        html += '<td><center>' + item.e_status + '</center></td>';
+                        html += '<td><center>' +
+                                    '<form action="Detail_Solicitud_Hardware" method="post">' +
+                                        '<input value="' + item.id + '" type="hidden" name="id">' +
+                                        '<input value="' + item.iddetails + '" type="hidden" name="id_user_solicitante">' +
+                                        '<button class="fa fa-eye form-control " style="background:#B0CF31; color: white;" type="submit"></button>' +
+                                    '</form>' +
+                                '</center></td>';
+                        html += '</tr>';
+                    });
+                    $('.tbody').html(html);
+                }
+        });
+    }
+    function Loan_Equipment() {
+
+        var laptop = $('#laptop').val();
+        var escanners = $('#escanners').val();
+        var impresoras = $('#impresoras').val();
+        var comments = $('#comentarios').val();
+        var fecha_requerida = $('#fecha_requerida').val();
+        $.ajax({
+            url: "/siixsem_it/Add_Loan_Equipment",
+                        type: "POST",
+                        data: {
+                            laptop: laptop,
+                            escanners: escanners,
+                            impresoras: impresoras,
+                            comments: comments,
+                            fecha_requerida: fecha_requerida
+                        },
+                        cache: false,
+                        beforeSend:
+                            function (cargando) {
+                                //$("#loader").show();
+                                //document.getElementById("btnAdd").disabled = true;
+                            },
+                        success: function (result) {
+                            //$("#loader").hide();
+                            alertify.notify('¡Se añadio dispositivo al inventario con éxito!', 'success', 1, function () { location.reload(); });
+
+                        },
+
+                        error: function (errormessage) {
+                            alertify.error('Upss... Ocurrio un error comunicate al departamento de IT ¡Gracias!');
+                            //document.getElementById("btnAdd").disabled = false;
+                        }
+                    });
+    }
+
+    function Get_EquipDisp() {
+        // console.log(DATOS);
+        $.ajax({
+            //data: { id_description_equipment: id_description_equipment },
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json; charset=uft-8",
+
+            url: "/siixsem_it/List_EquipD",
+            success: function (data) {
+                for (u in data) {
+                    $("#equip0").append("<option value=" + data[u].id + ">" + data[u].code_description + " " + data[u].e_name + "-" + data[u].id_eq + "</option>");
+
+                }
+
+            },
+            error: function (result) {
+                alert(result);
+            }
+        });
+    }
+</script>
+

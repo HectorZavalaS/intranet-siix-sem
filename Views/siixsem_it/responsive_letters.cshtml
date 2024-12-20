@@ -1,0 +1,316 @@
+﻿@if (Session["id_department"].ToString() == "1" || Session["id_department"].ToString() == "10")
+{
+
+    <body style="font-family: 'Montserrat', sans-serif; font-size:small;">
+
+        <br>
+        <center>
+            <h1> Cartas Responsivas  </h1>
+            <hr width="50%">
+        </center>
+        <br><br>
+        <div class=" row">
+            <div class="col-sm-1">
+                <center>
+                    <a class="btn btn-default form-control" style="color: white; background: #86CF53;" onclick="fnExcelReport();" id="btnExport">
+                        <span class="fa fa-file-excel-o" width="50%"></span>
+                    </a>
+                </center>
+            </div>
+            <div class="col-sm-1">
+                <center>
+                    <a class="btn btn-default form-control" style="color:white; background:#5ab8ff;">
+                        <span class="fa fa-search" width="50%"></span>
+                    </a>
+                </center>
+            </div>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" id="Search" placeholder="Search" />
+            </div>
+            <div class="col-sm-6">
+
+            </div>
+            <div class="col-sm-1">
+
+            </div>
+
+        </div>
+
+        <br><br>
+
+        <table class="table-striped" id="table">
+            <thead>
+                <tr class="row_table header" style="color:white; background:#5271FF;">
+                    <th><center>Nombre Equipo</center></th>
+                    <th><center>Marca</center></th>
+                    <th><center>Serial</center></th>
+                    <th><center>Modelo</center></th>
+                    <th><center>Departamento</center></th>
+                    <th><center>Ubicación</center></th>
+                    <th><center>Estatus</center></th>
+                    @*<th><center>Dispositivo</center></th>*@
+                    <th><center>Comentarios</center></th>
+                    @*<th><center>Activo Fijo</center></th>*@
+                    <th><center>PDF CR Vigente</center></th>
+                </tr>
+            </thead>
+            <tbody class="tbody" style="color:#666666;" id="tabla"></tbody>
+        </table>
+        <!-- The Modal Agregar nuevo Equipo -->
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Añadir Dispositivo</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="container">
+                            <table class="table table-striped" id="table_add">
+                                <thead>
+                                    <tr class="row_table header" style="color:white; background:#5271FF;">
+                                        <th><center>Tipo de Dispositivo</center></th>
+                                        <th><center>No. Serie</center></th>
+                                        <th><center>Marca</center></th>
+                                        <th><center>Modelo</center></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table_body" style="color:#666666;" id="table_body">
+                                    <tr>
+                                        <td>
+                                            <select name="id_description_equipment_0" id="id_description_equipment_0" class="form-control"></select>
+
+                                        </td>
+                                        <td>
+                                            <input class="form-control" id="series_0" name="series" />
+                                        </td>
+                                        <td>
+                                            <select id="brad_0" name="brad" class="form-control">
+                                                <option value="Dell">Dell</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select id="model_0" name="model" class="form-control">
+                                                <option value="Latitud 3420">Latitud 3420</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+                            <br />
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p>Personalizar SEM</p>
+                                    <div class="row">
+                                        <div class="col-sm-1"><input type="checkbox" id="id_check" class="form-checkbox"></div>
+                                        <div class="col-sm-10"><input type="number" class="form-control" id="sem" name="sem" /></div>
+                                    </div>
+
+
+
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="">Terminación de garantía</label>
+                                    <input type="date" class="form-control" id="warranty" name="warranty" />
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="">Departamento Comprador</label>
+                                    <select name="buyer" id="buyer" class="form-control"></select>
+                                </div>
+                            </div>
+                            <div class="div_estatus" id="div_estatus">
+                                <br /><center><h5> Estatus Dispositivo</h5></center>
+                                <div class="row">
+
+                                    <div class="col-md-4">
+                                        <label for="">Estatus</label>
+                                        <select id="status" class="form-control">
+                                            <option value="Entregado">Entregado</option>
+                                            <option value="En preparación">En preparación</option>
+                                            <option value="Resguardo IT">Resguardo IT</option>
+                                            <option value="Obsoleto">Obsoleto</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="">Ubicación</label>
+                                        <select id="ubicacion" class="form-control">
+                                            <option value="Almacen IT">Almacen IT</option>
+                                            <option value="Con usuario">Con usuario</option>
+                                            <option value="Oficina IT">Oficina IT</option>
+                                            <option value="Site 1">Site 1</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="div_details" id="div_details">
+                                <center><h5> Caracteristicas</h5></center>
+                                <div class="row" id="details_row">
+                                    <div class="col-md-3">
+                                        <label for="">Procesador</label>
+                                        <select name="procesador" id="procesador" class="form-control"></select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="">Memoria Ram</label>
+                                        <select name="ram" id="ram" class="form-control"></select>
+
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="">Tipo de Disco</label>
+                                        <select name="" id="type_disk" class="form-control"></select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="">Almacenamiento</label>
+                                        <select name="" id="almacenamiento" class="form-control"></select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="">Comentarios</label>
+                                    <br>
+                                    <textarea id="comments" name="comments" rows="4" cols="50"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success butsave" id="butsave" name="butsave" onclick="Add_Equipment()">Save</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+
+    </body>
+    <script>
+        $(document).ready(function () {
+            function Contains(text_one, text_two) {
+                if (text_one.indexOf(text_two) != -1)
+                    return true;
+            }
+
+            $("#Search").keyup(function () {
+                var searchText = $("#Search").val().toLowerCase();
+                $(".fila").each(function () {
+                    if (!Contains($(this).text().toLowerCase(), searchText)) {
+                        $(this).hide();
+                    }
+                    else {
+                        $(this).show();
+                    }
+                });
+            });
+            var check = document.getElementById('id_check');
+            $("#sem").hide();
+            check.addEventListener('click', function () {
+                if (check.checked) {
+
+                    $("#sem").show();
+                    console.log($('sem').val());
+                } else {
+                    $("#sem").hide();
+                    console.log($('sem').val());
+                }
+            })
+            all_masterlist();
+
+
+
+
+
+
+
+
+        });
+        function all_masterlist() {
+            $.ajax({
+
+                url: "/siixsem_it/GetMaster_List",
+                //data: JSON.stringify(empObj),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success:
+                    function (result) {
+                        var html = '';
+                        $.each(result, function (key, item) {
+
+                            html += '<tr class="fila row_table" id="fila">';
+                            html += '<td><center>' + item.e_name + '-' + item.id_eq + '</center></td>';
+                            html += '<td><center>' + item.brand + '</center></td>';
+                            html += '<td><center>' + item.series + '</center></td>';
+                            html += '<td><center>' + item.model_name + '</center></td>';
+                            html += '<td><center>' + item.name_dep + '</center></td>';
+                            html += '<td><center>' + item.ubication + '</center></td>';
+                            html += '<td><center>' + item.e_status + '</center></td>';
+                            //html += '<td><center>' + item.cod_description + '</center></td>';
+                            html += '<td><center>' + item.comments + '</center></td>';
+                           // html += '<td><center>' + item.activo_fijo + '</center></td>';
+                            if (item.name_file != "") {
+                                html += '<td>' +
+                                    '<form action="Dowland_Responsive" method="post">' +
+                                    '<input value="' + item.name_file + '" type="hidden" name="name_file" />' +
+                                    '<center><button class="fa  fa-download btn-sm btn btn-default " style="background:#5CE1E6;"   type="submit"></button></center>' +
+                                    '</form>' +
+                                    '</td>';
+                            } else {
+                                html += '<td>' +
+
+                                    '</td>';
+                            }
+                            //html += '<td><center><input type="submit" value="Enviar" /></center></td>';
+                            //html += '<td><center><button style="background:#FFDE59;" class="btn btn-sm btn-default mt-2 " data-toggle="modal" data-target="#edit_equipment" data-id="' + item.id + '"><i class="fas fa-bars"></i></button></center></td>';
+                            //html += "<td><button class='btn btn-sm btn-primary mt-2' data-toggle='modal' data-target='#edit-employee-modal' data-id='"+value.id+"'>Edit</button></td>";
+                            // html += '<td><button type="button" class="btn btn-default  fa fa-pencil" data-toggle="modal" data-target="#myModal" style="background:#ffde59; " onclick="return get(' + item.id_employe + ')"></button></td>';
+
+                            // html += '<td><button type="button" class="btn btn-default  fa fa-pencil" data-toggle="modal" data-target="#myModal" style="background:#ffde59; " onclick="return getbyID(' + item.id_ticket + ')"></button></td>';
+
+                            html += '</tr>';
+                        });
+                        $('.tbody').html(html);
+                    }
+            });
+        }
+        function fnExcelReport() {
+            var tab_text = "<meta http-equiv='content-type' content='application/vnd.ms-excel; charset=UTF-8'>" +
+                "<table border='2px'>" + "<tr bgcolor='#5ab8ff'>";
+            var j = 0;
+            tab = document.getElementById('table'); // id of table
+            for (j = 0; j < tab.rows.length; j++) {
+                tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
+
+            }
+            var ua = window.navigator.userAgent;
+            sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+            return (sa);
+        }
+    </script>
+
+}
+
+else
+{
+    <script type="text/javascript">
+        window.location = "/Home/Index";
+    </script>
+
+}

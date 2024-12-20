@@ -1,0 +1,172 @@
+﻿@if (Session["type_user"].ToString() == "Administrador")
+{ 
+    <br />
+    <br />
+    <center><h1>Solicitud de servicios IT</h1></center>
+    <br />
+    <br />
+    <div class="container">
+        <div class="row">
+            <table class="table table-hover" style="text-align:center" id="table_1">
+                <thead>
+                    <tr>
+                        <td colspan="2">¿Requieres creación de usuario nuevo en dominio?</td>
+                        <td colspan="4">Detalles usuario</td>
+                        <td><button type="button" onclick="newline_tbodyuser()" class="btn btn-primary  fa fa-plus"   style="background: #74C474; color: #ffffff;"></button></td>
+                    </tr>
+                    <tr>
+                        <td>Si</td>
+                        <td>No</td>
+                        <td># nómina</td>
+                        <td>Nombre</td>
+                        <td>Apellido</td>
+                        <td>Area</td>
+                    </tr>
+                </thead>
+                <tbody id="tbody_users">
+                    <tr>
+                        <td><input type="checkbox"  id="check_yes" name="check" /></td>
+                        <td><input type="checkbox"  id="check_no" name="check" /></td>
+                        <td><input type="text" class="form-control" /></td>
+                        <td><input type="text" class="form-control" /></td>
+                        <td><input type="text" class="form-control" /></td>
+                        <td><input type="text" class="form-control" /></td>
+                    </tr>
+                   
+                </tbody>
+            </table>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <table class="table table-hover" style="text-align:center">
+                    <thead style="background: #8572C6; color: #ffffff; ">
+                        <tr>
+                            <th scope="col">Seleaccionar</th>
+                            <th scope="col">Servicio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row"><input type="checkbox" /></th>
+                            <td>Cogiscan</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><input type="checkbox" /></th>
+                            <td>Simos</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><input type="checkbox" /></th>
+                            <td>Oracle</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-6">
+                <table class="table table-hover" style="text-align:center">
+                    <thead style="background: #DF7FB3; color: #ffffff;">
+                        <tr>
+                            <th scope="col">Ubicación</th>
+                            <th scope="col">Black</th>
+                            <th scope="col">Color</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Nave 1</td>
+                            <th scope="row"><input type="checkbox" /></th>
+                            <th scope="row"><input type="checkbox" /></th>
+                        </tr>
+                        <tr>
+                            <td>Producción</td>
+                            <th scope="row"><input type="checkbox" /></th>
+                            <th scope="row"><input type="checkbox" /></th>
+                        </tr>
+                        <tr>
+                            <td>Nave 3</td>
+                            <th scope="row"><input type="checkbox" /></th>
+                            <th scope="row"><input type="checkbox" /></th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <center><h5>Acceso a Carpetas de Red</h5></center>
+                <br />
+                <table class="table table-hover" style="text-align:center">
+                    <thead style="background: #8E699D;color:#ffffff;">
+                        <tr>
+                            <th scope="col">Carpeta de Red</th>
+                            <th scope="col">Lectura</th>
+                            <th scope="col">Escritura</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="text" class="form-control" /></td>
+                            <th scope="row"><input type="checkbox" /></th>
+                            <th scope="row"><input type="checkbox" /></th>
+                        </tr>
+                    </tbody>
+                </table>
+                <input type="submit" />
+            </div>
+
+        </div><br />
+        <h5>Comentarios</h5>
+        <br />
+        <textarea rows="5" cols="100"></textarea>
+        <br />
+        <input type="submit" value="Enviar" />
+
+    </div>
+    <script>
+        $(document).ready(function () {
+
+            $("#check_yes").prop("checked", true);  
+            $("#check_yes").on('change', function () {
+                if ($(this).is(':checked')) {
+                    $("#check_no").prop("checked", true);  
+                } else {
+                    $("#check_yes").prop("checked", false);  
+                    
+                }
+            });
+
+
+        //    $("#check_yes").prop("checked", true);  
+          //  $("#check_no").prop("checked", false);  
+
+
+
+
+
+        });
+        function newline_tbodyuser() {
+            var yea = document.getElementById("tbody_users").rows.length;
+            var DATOS = { Contador: yea };
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=uft-8",
+                data: "{conta:" + JSON.stringify(DATOS) + "}",
+                url: "/siixsem_it/newline_tbody_user",
+                success: function (data) {
+                    //alert( document.getElementsByClassName("ctn").length);
+                    $("#table_1").append(data);
+
+                },
+                error: function (result) {
+                    alert("error");
+                }
+            });
+        }
+    </script>
+    }
+    else
+    {
+    <script type="text/javascript">
+        window.location = "/Home/Index";
+    </script>
+
+    }

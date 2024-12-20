@@ -1,0 +1,325 @@
+﻿@if (Session["type_user"].ToString() == "Administrador"||Session["type_user"].ToString() == "Estandar")
+{
+
+<div class="container">
+    <br /><br />
+    <center>
+        <h2>Equipos Asignados</h2>
+        <hr style="background-color: #dc3545;  width:5%;  border-width: 2px; color: white;" />
+    </center>
+    <br /><br />
+
+    <div class="row">
+        <div class="col-sm-12">
+            <center>
+                <div class="table100">
+                    <div class="wrap-table100">
+                        <table class="table">
+                            <thead>
+                                <tr class="row_table header" style="color: white; background: #8572C6; font-size: 15px; ">
+                                    <th> <center># Responsiva </center></th>
+                                    <th> <center>Identificador </center></th>
+                                    <th> <center>Tipo de dispositivo </center> </th>
+                                    <th> <center>Marca </center> </th>
+                                    <th> <center>No. Serie </center> </th>
+                                    <th> <center>Estatus </center> </th>
+                                    <th> <center>Generar PDF </center> </th>
+                                    <th> <center>Carga de Archivos </center> </th>
+                                    <th> <center>Descarga de CR </center> </th>
+                                </tr>
+                            </thead>
+                            <bold>
+                                <tbody class="tbody5" style="color:#666666;  font-size:15px;"></tbody>
+                            </bold>
+                        </table>
+                    </div>
+                </div>
+            </center>
+        </div>
+    </div>
+    <div class="row">
+        <table class="table table-hover" style="text-align:center">
+            <thead style="background: #60B8D4; color: #FFFFFF; ">
+                <tr>
+                    <th scope="col"># Solicitud</th>
+                    <th scope="col">Laptops</th>
+                    <th scope="col">Escanner</th>
+                    <th scope="col">Impresoras WIFI</th>
+                    <!--th scope="col">Usuario solicitante</!--th>
+                    <th scope="col">Usuario presto IT</th>
+                    <th scope="col">Usuario que entrego</th>
+                    <th scope="col">Usuario recibio IT</th-->
+                    <th scope="col">Fecha de Solicitud</th>
+                    <th scope="col">Fecha de Prestamo</th>
+                    <th scope="col">Fecha de Devolución</th>
+                    <th scope="col">Comentarios</th>
+                    <th scope="col">Estatus</th>
+
+                    <th scope="col">Tipo solicitud</th>
+                    <th scope="col">Detalles</th>
+                </tr>
+            </thead>
+            <tbody class="tbody" style="color:#666666;" id="tbody"></tbody>
+        </table>
+    </div>
+    <!-- The Modal details -->
+    <div class="modal fade" id="upload_respl">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content ">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Cargar Archivo</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="row">
+                        <table class="table">
+                            <thead>
+                                <tr class="row_table header" style="color: white; background: #8572C6; font-size: 15px; ">
+                                    <th> <center>Carga de archivo </center></th>
+                                </tr>
+                            </thead>
+                            <bold>
+                                <tbody class="tbody6" style="color:#666666;  font-size:15px;">
+                                    <tr>
+                                        <td>
+                                            <center>
+                                                @{ using (Html.BeginForm("responsive_letters", "siixsem_it", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                                    {
+                                                        <input type="file" name="file" id="file" />
+                                                        <input type="hidden" name="idM" id="idM" />
+                                                        <input type="hidden" name="ie_eqM" id="ie_eqM" />
+                                                        <input type="submit" class="fa fa-upload btn-sm btn btn-success " style="font-family: 'Montserrat', sans-serif; font-size:small;" onclick="Upload" value="Subir" />
+                                                    }
+                                                }
+                                            </center>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </bold>
+                        </table>
+                    </div>
+
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="~/Scripts/select2.js"></script>
+<script>
+        $(document).ready(function () {
+            Detalles_hardware_loan();
+            all_responsives();
+            Get_EquipDisp();
+
+            function Contains(text_one, text_two) {
+                if (text_one.indexOf(text_two) != -1)
+                    return true;
+            }
+
+            $("#Search").keyup(function () {
+                var searchText = $("#Search").val().toLowerCase();
+                $(".fila").each(function () {
+                    if (!Contains($(this).text().toLowerCase(), searchText)) {
+                        $(this).hide();
+                    }
+                    else {
+                        $(this).show();
+                    }
+                });
+            });
+        });
+        /*-------------------------------------USERS-----------------------------------------------*/
+        function all_responsives() {
+            var id = $('#id').val();
+            $.ajax({
+                url: "/siixsem_it/DetailR",
+                type: "POST",
+                data: {
+                    id: id
+                },
+                cache: false,
+                beforeSend:
+                    function (cargando) {
+                    },
+                success:
+                    function (result) {
+                        console.log(result);
+                        var html = '';
+                        $.each(result, function (key, item) {
+
+                            html += '<tr class="fila row_table" id="fila">';
+                            html += '<td><center>' + item.ide + '</center></td>';
+                            html += '<td><center>' + item.e_name + "-" + item.id_eq + '</center></td>';
+                            html += '<td><center>' + item.cod_description + '</center></td>';
+                            html += '<td><center>' + item.name_trademark + '</center></td>';
+                            html += '<td><center>' + item.series + '</center></td>';
+                            html += '<td><center>' + item.e_status + '</center></td>';
+                            html += '<td>' +
+                                '<form action="PDF_Responsive" method="post">' +
+                                '<input value="' + id + '" type="hidden" name="id" />' +
+                                '<input value="' + item.ide + '" type="hidden" name="identificador" />' +
+                                '<input value="' + item.id_eq + '" type="hidden" name="id_sem" />' +
+                                '<center><button class="fa fa-file-pdf-o btn-sm btn btn-default " style="background:#FF5757; color:#fff;"   type="submit"></button></center>' +
+                                '</form>' +
+                                '</td>';
+                            //html += '<td>' + '<center> <button type="button" class="btn btn-primary  fa fa-plus" data-toggle="modal" data-target="#myModal"></button></center>' + '</td>';
+                            html += '<td><center><button type="button" class="btn btn-default btn-sm fa fa-upload btn-default" style="background:#7ED957;" data-toggle="modal" data-target="#upload_respl"  onclick="Upload_PDF(' + item.id + "," + item.ide + ')"></button></center></td>';
+
+                            if (item.name_file != "") {
+                                html += '<td>' +
+                                    '<form action="Dowland_Responsive" method="post">' +
+                                    '<input value="' + item.name_file + '" type="hidden" name="name_file" />' +
+                                    '<center><button class="fa  fa-download btn-sm btn btn-default " style="background:#5CE1E6;"   type="submit"></button></center>' +
+                                    '</form>' +
+                                    '</td>';
+                            } else {
+                                html += '<td></td>';
+                            }
+
+
+                            html += '</tr>';
+                        });
+
+                        $('.tbody5').html(html);
+                    },
+
+                error: function (errormessage) {
+                    alertify.error('Upss... Ocurrio un error comunicate al departamento de IT ¡Gracias!');
+                }
+            });
+
+        }
+        function Get_EquipDisp() {
+            // console.log(DATOS);
+            $.ajax({
+                //data: { id_description_equipment: id_description_equipment },
+                dataType: "json",
+                type: "POST",
+                contentType: "application/json; charset=uft-8",
+
+                url: "/siixsem_it/List_EquipD",
+                success: function (data) {
+                    for (u in data) {
+                        $("#equip0").append("<option value=" + data[u].id + ">" + data[u].code_description + " " + data[u].e_name + "-" + data[u].id_eq + "</option>");
+
+                    }
+
+                },
+                error: function (result) {
+                    alert(result);
+                }
+            });
+        }
+        $('#btnSend').click(function () {
+            var yea = document.getElementById("tb").rows.length;
+            var DATOS = { Contador: yea };
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=uft-8",
+                data: "{conta:" + JSON.stringify(DATOS) + "}",
+                url: "/siixsem_it/newline",
+                success: function (data) {
+                    //alert( document.getElementsByClassName("ctn").length);
+                    $("#tabla").append(data);
+                },
+                error: function (result) {
+                    alert("error");
+                }
+            })
+        });
+        function Save_Responsive() {
+            var yea = document.getElementById("tb").rows.length;
+            for (i = 0; i < yea; i++) {
+                var id_eq = $('#equip' + i).val();
+
+                var id = $('#idM').val(); console.log(id);
+                $.ajax({
+                    url: "/siixsem_it/add_responsiveuser",
+                    type: "POST",
+                    data: {
+                        id_eq: id_eq,
+                        id: id
+                    },
+                    cache: false,
+                    beforeSend:
+                        function (cargando) {
+                            //$("#loader").show();
+                            //document.getElementById("btnAdd").disabled = true;
+                        },
+                    success: function (result) {
+                        alertify.notify('¡Se añadio dispositivo al inventario con éxito!', 'success', 3, function () { location.reload(); });
+                    },
+
+                    error: function (errormessage) {
+                        alertify.error('Upss... Ocurrio un error comunicate al departamento de IT ¡Gracias!');
+                        //document.getElementById("btnAdd").disabled = false;
+                    }
+                });
+            }
+        }
+        function Upload_PDF(id, ide) {
+            $("#idM").val(id);
+            $("#ie_eqM").val(ide);
+        }
+        function Detalles_hardware_loan() {
+            $.ajax({
+                url: "/siixsem_it/Get_Hardware_loan",
+                //data: JSON.stringify(empObj),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success:
+                    function (result) {
+                        var html = '';
+                        $.each(result, function (key, item) {
+
+                            html += '<tr class="fila row_table" id="fila">';
+                            html += '<td><center>' + item.id + '</center></td>';
+                            html += '<td><center>' + item.laptop + '</center></td>';
+                            html += '<td><center>' + item.escanners + '</center></td>';
+                            html += '<td><center>' + item.impresoras + '</center></td>';
+                            /*html += '<td><center>' + item.id_user_solicitante + '</center></td>';
+                            html += '<td><center>' + item.id_user_presto_it + '</center></td>';
+                            html += '<td><center>' + item.id_user_entrega + '</center></td>';
+                            html += '<td><center>' + item.id_user_recibio_it + '</center></td>';*/
+                            html += '<td><center>' + item.fecha_que_solicitan + '</center></td>';
+                            html += '<td><center>' + item.fecha_que_se_presta + '</center></td>';
+                            html += '<td><center>' + item.fecha_que_entregan + '</center></td>';
+                            html += '<td><center>' + item.comments + '</center></td>';
+                            html += '<td><center>' + item.e_status + '</center></td>';
+                            html += '<td><center>' + item.tipo_solicitud + '</center></td>';
+                            html += '<td>' +
+                                '<form action="Formato_Prestamo_Equipo" method="post">' +
+                                '<input value="' + item.id + '" type="hidden" name="solicitud" />' +
+                                '<center><button class="fa fa-file-pdf-o btn-sm btn btn-default " style="background:#FF5757; color:#fff;"   type="submit"></button></center>' +
+                                '</form>' +
+                                '</td>';
+                            html += '</tr>';
+                        });
+                        $('.tbody').html(html);
+                    }
+            });
+        }
+</script>
+
+}
+else
+{
+<script type="text/javascript">
+        window.location = "/Home/Index";
+</script>
+
+}

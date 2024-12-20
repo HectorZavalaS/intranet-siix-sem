@@ -1,0 +1,844 @@
+﻿@{
+    if (Session["type_user"].ToString() == "Administrador")
+    {
+        <div class="container">
+            <br /><br />
+            <center>
+                <h2>Detalle Responsivas</h2>
+                <hr style="background-color: #dc3545;  width:5%;  border-width: 2px; color: white;" />
+            </center>
+            <br /><br />
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <center><h6 for="usuario">No. nómina</h6></center>
+                                <input type="hidden" class="form-control" id="id" style="background:#e9ecef;" value="@ViewBag.id" />
+                                <input type="text" class="form-control" id="usuario" style="background:#e9ecef;" value="@ViewBag.nomi" readonly/>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <center><h6 for="usuario">Usuario</h6></center>
+                                <input type="text" class="form-control" id="usuario" style="background:#e9ecef;" value="@ViewBag.name @ViewBag.ape" readonly/>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <center><h6 for="prioridad">Departamento</h6></center>
+                                <input type="text" class="form-control" id="usuario" style="background:#e9ecef;" value="@ViewBag.name_dep" readonly/>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <center>
+                                <label>Asignar equipo</label><br />
+                                <button type="button" class="btn btn-primary  fa fa-plus" data-toggle="modal" data-target="#myModal"></button>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <center>
+                        <div class="table100">
+                            <div class="wrap-table100">
+                                <table class="table tab-content">
+                                    <thead>
+                                        <tr class="row_table header" style="color: white; background: #8572C6; font-size: 15px; ">
+                                            <th> <center># Responsiva </center></th>
+                                            <th> <center>Identificador </center></th>
+                                            <th> <center>Tipo de dispositivo </center> </th>
+                                            <th> <center>Marca </center> </th>
+                                            <th> <center>No. Serie </center> </th>
+                                            <th> <center>Estatus </center> </th>
+                                            <th> <center>Generar PDF </center> </th>
+                                            <th> <center>Cancelar CR </center> </th>
+                                            <th> <center>Carga de Archivos </center> </th>
+                                            <th> <center>Ver CR </center> </th>
+                                            <th> <center>Descarga de CR </center> </th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <bold>
+                                        <tbody class="tbody5" style="color:#666666;  font-size:15px;"></tbody>
+                                    </bold>
+                                </table>
+                            </div>
+                        </div>
+                    </center>
+                </div>
+            </div>
+            <!-- The Modal details -->
+            <div class="modal fade" id="myModal">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content ">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Asignación Equipo</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+
+                                    <table class="table" id="tabla">
+                                        <thead>
+                                            <tr class="row_table header" style="color:white; background:#dc3545;  font-size:15px;">
+                                                <th> <center>Equipo </center>
+                                            </tr>
+                                        </thead>
+                                        <bold>
+                                            <tbody class="tb" id="tb" style="color:#666666;  font-size:15px;">
+
+                                                <tr><td><input type="hidden" name="input_newid" id="input_newid" /><input type="hidden" class="form-control" id="idM" style="background:#e9ecef;" value="@ViewBag.id" /><select name="equip0" id="equip0" class="form-control myselect" data-show-subtext="true" data-live-search="true" required><option value="0">--Selecciona--</option></select></td></tr>
+                                            </tbody>
+                                        </bold>
+                                    </table>
+
+                                    <button for="e9" type="button" class="btn btn-success" id="btnSend">+</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" onclick="Save_Responsive()">Save</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- The Modal upload file -->
+            <div class="modal fade" id="upload_respl">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content ">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Cargar Archivo</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <div class="row">
+                                <table class="table">
+                                    <thead>
+                                        <tr class="row_table header" style="color: white; background: #8572C6; font-size: 15px; ">
+                                            <th> <center>Carga de archivo </center></th>
+                                        </tr>
+                                    </thead>
+                                    <bold>
+                                        <tbody class="tbody6" style="color:#666666;  font-size:15px;">
+                                            <tr>
+                                                <td>
+                                                    <center>
+                                                        <input value="" id="sem_ide" type="hidden"/>
+                                                        <input value="" id="iden" type="hidden"/>
+                                                        <input type="file" id="FileUpload1" />
+                                                        <input type="button" id="btnUpload" value="Upload Files" onclick="UpdateR(document.getElementById('sem_ide').value, document.getElementById('iden').value)" />
+                                                    </center>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </bold>
+                                </table>
+                            </div>
+
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" ></script>
+        <script>
+            $(document).ready(function () {
+                Get_EquipDisp();
+                all_responsives();
+
+            });
+            /*-------------------------------------TABLA DE EQUIPOS ASIGNADOS-----------------------------------------------*/
+            function all_responsives() {
+                var id = $('#id').val();
+                $.ajax({
+                    url: "/siixsem_it/DetailR",
+                    type: "POST",
+                    data: {
+                        id: id
+                    },
+                    cache: false,
+                    beforeSend:
+                        function (cargando) {
+                        },
+                    success:
+                        function (result) {
+                            var html = '';
+                            $.each(result, function (key, item) {
+
+                                    html += '<tr class="fila row_table" id="fila">';
+                                    html += '<td><center><input value = "' + item.newide + '" type = "hidden" name = "id" />' + item.ide + '</center></td>';
+                                    html += '<td><center>' + item.e_name + "-" + item.id_eq + '</center></td>';
+                                    html += '<td><center>' + item.cod_description + '</center></td>';
+                                    html += '<td><center>' + item.name_trademark + '</center></td>';
+                                    html += '<td><center>' + item.series + '</center></td>';
+                                    html += '<td><center>' + item.e_status + '</center>'+
+                                        '<input value="' + item.idfile + '" type="hidden" id="identificador" />' +
+                                        '<input value="' + item.id + '" type="hidden" id="sem_i" /></td> ';
+                                    html += '<td>' +
+                                        '<form action="PDF_Responsive" method="post">' +
+                                        '<input value="' + id + '" type="hidden" name="id" />' +
+                                        '<center><button class="fa fa-file-pdf-o btn-sm btn btn-default " style="background:#FF5757; color:#fff;"   type="submit"></button></center>' +
+                                        '</form>' +
+                                        '</td>';
+                                    html += '<td><center><button class="fa fa-window-close btn-sm btn btn-default " style="background:#FF5757; color:#fff;"  onclick="Cancel_CR(' + item.id + "," + item.idfile + "," + item.id_eq + ')" type="submit"></button></center></td>';
+                                    html += '<td><center><button type="button" class="btn btn-default btn-sm fa fa-upload btn-default" style="background:#7ED957;" data-toggle="modal" data-target="#upload_respl" onclick="IdtoModal(' + item.id + ',' + item.ide + ' )"></button></center></td>';
+
+                                    if (item.name_file != "") {
+                                        html += '<td>' +
+                                            '<center><button class="fa  fa-eye btn-sm btn btn-default " style="background:#5CE1E6;"  onclick="Show_CR(' + item.id_eq + ')"></button></center>'
+                                            '</td>';
+                                        html += '<td>' +
+                                            '<form action="Dowland_Responsive" method="post">' +
+                                            '<input value="' + item.name_file + '" type="hidden" name="name_file" />' +
+                                            '<center><button class="fa  fa-download btn-sm btn btn-default " style="background:#5CE1E6;"  type="submit"></button></center>' +
+                                            '</form>' +
+                                            '</td>';
+                                        html += '</tr>';
+                                        html += '<tr style="display:none; height:500px;" style="display:none;" id="tdcr'+item.id_eq+'">' +
+                                            '<td colspan="11"><center><iframe src="/QR-TIN-004-00 Carta responsiva/' + item.name_file + '" style="width: 100%; height: 500px;" title="CR"></iframe></center></td>' ;
+                                        html += '</tr>';
+                                    }
+                                    else {
+                                        html += '<td></td>';
+                                        html += '<td></td>';
+                                        html += '</tr>';
+                                    }
+
+                                });
+
+                            $('.tbody5').html(html);
+                        },
+                        error: function (errormessage) {
+                        alertify.error('Upss... Ocurrio un error comunicate al departamento de IT ¡Gracias!');
+                    }
+                });
+
+            }
+            function Get_EquipDisp() {
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=uft-8",
+
+                    url: "/siixsem_it/List_EquipD",
+                    success: function (data) {
+                        for (u in data) {
+                            $("#equip0").append("<option value=" + data[u].id + ">" + data[u].code_description + " " + data[u].e_name + "-" + data[u].id_eq + "</option>");
+
+                        }
+                    },
+                    error: function (result) {
+                        alert(result);
+                    }
+                });
+            }
+            $('#btnSend').click(function () {
+                var yea = document.getElementById("tb").rows.length;
+                var DATOS = { Contador: yea };
+                $.ajax({
+                    type: "POST",
+                    contentType: "application/json; charset=uft-8",
+                    data: "{conta:" + JSON.stringify(DATOS) + "}",
+                    url: "/siixsem_it/newline",
+                    success: function (data) {
+                        //alert( document.getElementsByClassName("ctn").length);
+                        $("#tabla").append(data);
+                    },
+                    error: function (result) {
+                        alert("error");
+                    }
+                })
+            });
+            function Save_Responsive() {
+                var yea = document.getElementById("tb").rows.length;
+
+
+                for (i = 0; i < yea; i++) {
+                    var id_eq = $('#equip' + i).val();
+                    var id = $('#idM').val();
+                    var newidM = $('#input_newid').val();
+                    var id_user = $('#id').val();
+                    $.ajax({
+                        url: "/siixsem_it/add_responsiveuser",
+                        type: "POST",
+                        data: {
+                            id_eq: id_eq,
+                            id: id,
+                            newide: newidM,
+                            id_user: id_user
+                        },
+                        cache: false,
+                        beforeSend:
+                            function (cargando) {
+                            },
+                        success: function (result) {
+                            alertify.notify('¡Se asigno dispositivo al usuario con éxito!', 'success', 3, function () { location.reload(); });
+                        },
+
+                        error: function (errormessage) {
+                            alertify.error('Upss... Ocurrio un error al asignar el equipo');
+                        }
+                    });
+                }
+            }
+
+            function IdtoModal(ide,iden)
+            {
+                $('.modal-body #sem_ide').val(ide);
+                $('.modal-body #iden').val(iden);
+            }
+
+            function UpdateR(ide, iden) {
+                var id = ide;
+                var id_user = $('#id').val();
+                var identificador = iden;
+                // Checking whether FormData is available in browser
+                if(window.FormData !== undefined) {
+
+                    var fileUpload = $("#FileUpload1").get(0);
+                    var files = fileUpload.files;
+
+                    // Create FormData object
+                    var fileData = new FormData();
+
+                    // Looping over all files and add it to FormData object
+                    for (var i = 0; i < files.length; i++) {
+                        fileData.append(files[i].name, files[i] );
+                    }
+
+                    // Adding one more key to FormData object
+                    fileData.append('id', id_user);
+                    fileData.append('sem', id);
+                    fileData.append('identificador', identificador);
+
+                    $.ajax({
+                        url: '/siixsem_it/UploadFiles',
+                        type: "POST",
+                        contentType: false, // Not to set any content header
+                        processData: false, // Not to process data
+                        data: fileData,
+                        success: function (result) {
+                            alertify.notify('¡Se subió CR con éxito!', 'success', 3, function () { location.reload(); });
+                        },
+                        error: function (err) {
+                            alert(err.statusText);
+                            console.log(err);
+                        }
+                    });
+                }else{
+                    alert("FormData is not supported.");
+                }
+            }
+            function Show_CR(idcr) { 
+                const cr = '#tdcr' + idcr;
+                $(cr).toggle();
+            }
+
+            function Cancel_CR(id, ide, sem) {
+                var id_equipo = id;
+                var sem = sem;
+                var identificador_responsiva = ide;
+                var id_usuario = $('#id').val();
+
+                $.ajax({
+                    url: "/siixsem_it/cancel_responsive",
+                    type: "POST",
+                    data: {
+                        id: id_equipo,
+                        id_eq: sem,
+                        ide: identificador_responsiva,
+                        username: id_usuario
+                    },
+                    cache: false,
+                    beforeSend:
+                        function (cargando) {
+                            //$("#loader").show();
+                            //document.getElementById("btnAdd").disabled = true;
+                        },
+                    success: function (result) {
+                        //$("#loader").hide();
+                        alertify.notify('¡Se cancelo carta responsiva con éxito!', 'success', 3, function () { location.reload(); });
+                    },
+
+                    error: function (errormessage) {
+                        alertify.error('Upss... Ocurrio un error al cancelar la carta responsiva comunicate al departamento de IT ¡Gracias!');
+                        //document.getElementById("btnAdd").disabled = false;
+                    }
+                });
+            }
+        </script>
+    }
+    else
+    {
+        <script type="text/javascript">
+            window.location = "/Home/Index";
+        </script>
+    }
+
+    /*
+
+    if (Session["type_user"].ToString() == "Administrador")
+    {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" />
+    <div class="container">
+
+        <br /><br />
+        <center>
+            <h2>Detalle Responsivas</h2>
+            <hr style="background-color: #dc3545;  width:5%;  border-width: 2px; color: white;" />
+        </center>
+        <br /><br />
+        <div class="row">
+            <div class="col-sm-4">
+            </div>
+
+            <div class="col-sm-8">
+                <form>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <center><h6 for="usuario">No. nómina</h6></center>
+                                        <input type="text" class="form-control" id="id" style="background:#e9ecef;" value="@ViewBag.id" />
+                                        <input type="hidden" class="form-control" id="usuario" style="background:#e9ecef;" value="@ViewBag.nomi" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <center><h6 for="usuario">Usuario</h6></center>
+                                        <input type="text" class="form-control" id="usuario" style="background:#e9ecef;" value="@ViewBag.name @ViewBag.ape" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+
+                                    <div class="form-group">
+                                        <center><h6 for="prioridad">Departamento</h6></center>
+                                        <input type="text" class="form-control" id="usuario" style="background:#e9ecef;" value="@ViewBag.name_dep" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-10"></div>
+            <div class="col-sm-2">
+                <button type="button" class="btn btn-primary  fa fa-plus" data-toggle="modal" data-target="#myModal"></button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <center>
+                    <div class="table100">
+                        <div class="wrap-table100">
+                            <table class="table">
+                                <thead>
+                                    <tr class="row_table header" style="color: white; background: #8572C6; font-size: 15px; ">
+                                        <th> <center># Responsiva </center></th>
+                                        <th> <center>Identificador </center></th>
+                                        <th> <center>Tipo de dispositivo </center> </th>
+                                        <th> <center>Marca </center> </th>
+                                        <th> <center>No. Serie </center> </th>
+                                        <th> <center>Estatus </center> </th>
+                                        <th> <center>Generar PDF </center> </th>
+                                        <th> <center>Carga de Archivos </center> </th>
+                                        <th> <center>Descarga de CR </center> </th>
+                                        <th> <center>Cancelar CR </center> </th>
+                                    </tr>
+                                </thead>
+                                <bold>
+                                    <tbody class="tbody5" style="color:#666666;  font-size:15px;"></tbody>
+                                </bold>
+                            </table>
+                        </div>
+                    </div>
+                </center>
+            </div>
+        </div>
+        <!-- The Modal details -->
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content ">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Asignación Equipo</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+
+                                <table class="table" id="tabla">
+                                    <thead>
+                                        <tr class="row_table header" style="color:white; background:#dc3545;  font-size:15px;">
+                                            <th> <center>Equipo </center>
+                                        </tr>
+                                    </thead>
+                                    <bold>
+                                        <tbody class="tb" id="tb" style="color:#666666;  font-size:15px;">
+
+                                            <tr><td><input type="hidden" name="input_newid" id="input_newid" /><input type="hidden" class="form-control" id="idM" style="background:#e9ecef;" value="@ViewBag.id" /><select name="equip0" id="equip0" class="form-control myselect" data-show-subtext="true" data-live-search="true" required><option value="0">--Selecciona--</option></select></td></tr>
+                                        </tbody>
+                                    </bold>
+                                </table>
+
+                                <button for="e9" type="button" class="btn btn-success" id="btnSend">+</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" onclick="Save_Responsive()">Save</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        <!-- The Modal upload file -->
+        <div class="modal fade" id="upload_respl">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content ">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Cargar Archivo</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="row">
+                            <table class="table">
+                                <thead>
+                                    <tr class="row_table header" style="color: white; background: #8572C6; font-size: 15px; ">
+                                        <th> <center>Carga de archivo </center></th>
+                                    </tr>
+                                </thead>
+                                <bold>
+                                    <tbody class="tbody6" style="color:#666666;  font-size:15px;">
+                                        <tr>
+                                            <td>
+                                                <center>
+
+                                                    <input type="file" id="FileUpload1" />
+                                                    <input type="button" id="btnUpload" value="Upload Files" />
+                                                </center>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </bold>
+                            </table>
+                        </div>
+
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="~/Scripts/select2.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            all_responsives();
+            Get_EquipDisp();
+
+        });
+        /*-------------------------------------USERS-----------------------------------------------
+        function all_responsives() {
+            var id = $('#id').val();
+            $.ajax({
+                url: "/siixsem_it/DetailR",
+                type: "POST",
+                data: {
+                    id: id
+                },
+                cache: false,
+                beforeSend:
+                    function (cargando) {
+                    },
+                success:
+                    function (result) {
+                        var html = '';
+                        $.each(result, function (key, item) {
+
+                            html += '<tr class="fila row_table" id="fila">';
+                            html += '<td><center><input value = "' + item.newide + '" type = "hidden" name = "id" />' + item.ide + '</center></td>';
+                            html += '<td><center>' + item.e_name + "-" + item.id_eq + '</center></td>';
+                            html += '<td><center>' + item.cod_description + '</center></td>';
+                            html += '<td><center>' + item.brand + '</center></td>';
+                            html += '<td><center>' + item.series + '</center></td>';
+                            html += '<td><center>' + item.e_status + '</center></td>';
+                            html += '<td>' +
+                                '<form action="PDF_Responsive" method="post">' +
+                                '<input value="' + id + '" type="hidden" name="id" />' +
+                                '<input value="' + item.ide + '" type="hidden" name="identificador" />' +
+                                '<center><button class="fa fa-file-pdf-o btn-sm btn btn-default " style="background:#FF5757; color:#fff;"   type="submit"></button></center>' +
+                                '</form>' +
+                                '</td>';
+                            //html += '<td>' + '<center> <button type="button" class="btn btn-primary  fa fa-plus" data-toggle="modal" data-target="#myModal"></button></center>' + '</td>'; html += '<td><center><button type="button" class="btn btn-default btn-sm fa fa-upload btn-default" style="background:#7ED957;" data-toggle="modal" data-target="#upload_respl"  onclick="Upload_PDF(' + item.id + "," + item.ide + ')"></button></center></td>';
+                            html += '<td><center><button type="button" class="btn btn-default btn-sm fa fa-upload btn-default" style="background:#7ED957;" data-toggle="modal" data-target="#upload_respl"  onclick="Upload_PDF(' + item.id + "," + item.ide + ')"></button></center></td>';
+
+                            if (item.name_file != "") {
+                                html += '<td>' +
+                                    '<form action="Dowland_Responsive" method="post">' +
+                                    '<input value="' + item.name_file + '" type="hidden" name="name_file" />' +
+                                    '<center><button class="fa  fa-download btn-sm btn btn-default " style="background:#5CE1E6;"   type="submit"></button></center>' +
+                                    '</form>' +
+                                    '</td>';
+                                html += '<td><center><button class="fa fa-window-close btn-sm btn btn-default " style="background:#FF5757; color:#fff;"  onclick="Cancel_CR(' + item.id + "," + item.ide + "," + item.id_eq + ')" type="submit"></button></center></td>';
+
+                            } else {
+                                html += '<td></td>';
+                                html += '<td></td>';
+                            }
+
+                            html += '</tr>';
+                            open_M(item.newide);
+                        });
+
+                        $('.tbody5').html(html);
+                    },
+
+                error: function (errormessage) {
+                    alertify.error('Upss... Ocurrio un error comunicate al departamento de IT ¡Gracias!');
+                }
+            });
+
+        }
+
+        function Get_EquipDisp() {
+            // console.log(DATOS);
+            $.ajax({
+                //data: { id_description_equipment: id_description_equipment },
+                dataType: "json",
+                type: "POST",
+                contentType: "application/json; charset=uft-8",
+
+                url: "/siixsem_it/List_EquipD",
+                success: function (data) {
+                    for (u in data) {
+                        $("#equip0").append("<option value=" + data[u].id + ">" + data[u].code_description + " " + data[u].e_name + "-" + data[u].id_eq + "</option>");
+
+                    }
+
+                },
+                error: function (result) {
+                    alert(result);
+                }
+            });
+        }
+        $('#btnSend').click(function () {
+            var yea = document.getElementById("tb").rows.length;
+            var DATOS = { Contador: yea };
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=uft-8",
+                data: "{conta:" + JSON.stringify(DATOS) + "}",
+                url: "/siixsem_it/newline",
+                success: function (data) {
+                    //alert( document.getElementsByClassName("ctn").length);
+                    $("#tabla").append(data);
+                },
+                error: function (result) {
+                    alert("error");
+                }
+            })
+        });
+
+        function Save_Responsive() {
+            var yea = document.getElementById("tb").rows.length;
+
+
+            for (i = 0; i < yea; i++) {
+                var id_eq = $('#equip' + i).val();
+                var id = $('#idM').val();
+                var newidM = $('#input_newid').val();
+                var id_user = $('#id').val();
+                $.ajax({
+                    url: "/siixsem_it/add_responsiveuser",
+                    type: "POST",
+                    data: {
+                        id_eq: id_eq,
+                        id: id,
+                        newide: newidM,
+                        id_user: id_user
+                    },
+                    cache: false,
+                    beforeSend:
+                        function (cargando) {
+                            //$("#loader").show();
+                            //document.getElementById("btnAdd").disabled = true;
+                        },
+                    success: function (result) {
+                        //$("#loader").hide();
+                        alertify.notify('¡Se asigno dispositivo al usuario con éxito!', 'success', 3, function () { location.reload(); });
+                        /*document.getElementById("btnAdd").disabled = false;
+                        Cargar_Datos();
+                        clearTextBox();
+                        Cargar_Datos();
+
+
+                    },
+
+                    error: function (errormessage) {
+                        alertify.error('Upss... Ocurrio un error al asignar el equipo');
+                        //document.getElementById("btnAdd").disabled = false;
+                    }
+                });
+            }
+        }
+
+
+        function open_M(newide) {
+            $("#input_newid").val(newide);
+        }
+        function Upload_PDF(id, ide) {
+            $("#id_equipo").val(id);
+            $("#identificador").val(ide);
+            console.log("id_equipo" + id);
+            console.log("id_usuario" + $("#id").val());
+            console.log("identificador" + ide);
+        }
+        function Cancel_CR(id, ide, sem) {
+            var id_equipo = id;
+            var sem = sem;
+            var identificador_responsiva = ide;
+            var id_usuario = $('#id').val();
+
+            $.ajax({
+                url: "/siixsem_it/cancel_responsive",
+                type: "POST",
+                data: {
+                    id: id_equipo,
+                    id_eq: sem,
+                    ide: identificador_responsiva,
+                    username: id_usuario
+                },
+                cache: false,
+                beforeSend:
+                    function (cargando) {
+                        //$("#loader").show();
+                        //document.getElementById("btnAdd").disabled = true;
+                    },
+                success: function (result) {
+                    //$("#loader").hide();
+                    alertify.notify('¡Se cancelo carta responsiva con éxito!', 'success', 3, function () { location.reload(); });
+                    /*document.getElementById("btnAdd").disabled = false;
+                    Cargar_Datos();
+                    clearTextBox();
+                    Cargar_Datos();
+
+                },
+
+                error: function (errormessage) {
+                    alertify.error('Upss... Ocurrio un error al cancelar la carta responsiva comunicate al departamento de IT ¡Gracias!');
+                    //document.getElementById("btnAdd").disabled = false;
+                }
+            });
+        }
+
+
+        $('#btnUpload').click(function () {
+
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+
+                var fileUpload = $("#FileUpload1").get(0);
+                var files = fileUpload.files;
+
+                // Create FormData object
+                var fileData = new FormData();
+
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+
+                $.ajax({
+                    url: '/siixsem_it/UploadFiles',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result) {
+                        alert(result);
+                    },
+                    error: function (err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
+    </script>
+
+    }
+
+    else
+    {
+    <script type="text/javascript">
+        window.location = "/Home/Index";
+    </script>
+    }
+    */
+}

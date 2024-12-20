@@ -1,0 +1,303 @@
+﻿
+<body style="font-family: 'Montserrat', sans-serif; font-size:small;">
+    <div class="container-fluid">
+        <br>
+        <center>
+            <h1>Facturas</h1>
+            <hr width="50%">
+        </center>
+        <br><br>
+        <div class=" row">
+            <div class="col-sm-1">
+                <center>
+                    <a class="btn btn-default form-control" style="color: white; background: #86CF53;" onclick="fnExcelReport();" id="btnExport">
+                        <span class="fa fa-file-excel-o" width="50%"></span>
+                    </a>
+                </center>
+            </div>
+            <div class="col-sm-1">
+                <center>
+                    <a class="btn btn-default form-control" style="color:white; background:#5ab8ff;">
+                        <span class="fa fa-search" width="50%"></span>
+                    </a>
+                </center>
+            </div>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" id="Search" placeholder="Search" />
+            </div>
+            <div class="col-sm-6">
+
+            </div>
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-primary  fa fa-plus" data-toggle="modal" data-target="#myModal"></button>
+            </div>
+
+        </div>
+        <br><br>
+        <table class="table table-striped" id="table">
+            <thead>
+                <tr class="row_table header" style="color:white; background:#5271FF;">
+                    <th><center>Numero de factura</center></th>
+                    <th><center>Fechas</center></th>
+                    <th><center>Subir Factura</center></th>
+                    <th><center>Ver Factura</center></th>
+                    <th><center>Descargar Factura</center></th>
+                </tr>
+            </thead>
+            <tbody class="tbody4" style="color:#666666;" id="tabla"></tbody>
+        </table>
+        <!-- Modal Agregar Factura -->
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <center><h4 class="modal-title">Añadir Factura</h4></center>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="">Numero de Factura</label>
+                                            <input class="form-control" type="text" id="NomFac" />
+                                            <br />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="">Fecha</label>
+                                            <input class="form-control" type="date" id="dateFac" />
+                                            <br />
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <br />
+
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success butsave" id="butsave" name="butsave" onclick="Add_Invoice()">Save</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- The Modal upload file -->
+        <div class="modal fade" id="upload_invoice">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content ">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Cargar Archivo</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="row">
+                            <table class="table">
+                                <thead>
+                                    <tr class="row_table header" style="color: white; background: #8572C6; font-size: 15px; ">
+                                        <th> <center>Carga de archivo </center></th>
+                                    </tr>
+                                </thead>
+                                <bold>
+                                    <tbody class="tbody6" style="color:#666666;  font-size:15px;">
+                                        <tr>
+                                            <td>
+                                                <center>
+                                                    <input value="" id="sem_id" type="hidden" />
+                                                    <input type="file" id="FileUpload1" />
+                                                    <input type="button" id="btnUpload" value="Upload Files" onclick="UpdateI(document.getElementById('sem_id').value)" />
+                                                </center>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </bold>
+                            </table>
+                        </div>
+
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function () {
+                all_invoice();
+                function Contains(text_one, text_two) {
+                    if (text_one.indexOf(text_two) != -1)
+                        return true;
+                }
+
+                $("#Search").keyup(function () {
+                    var searchText = $("#Search").val().toLowerCase();
+                    $(".fila").each(function () {
+                        if (!Contains($(this).text().toLowerCase(), searchText)) {
+                            $(this).hide();
+                        }
+                        else {
+                            $(this).show();
+                        }
+                    });
+                });
+            });
+
+            function all_invoice() {
+                $.ajax({
+                    url: "/siixsem_it/GetInvoice",
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    success:
+                        function (result) {
+                            var html = '';
+                            $.each(result, function (key, item) {
+
+                                html += '<tr class="fila row_table" id="fila">';
+                                html += '<td><center>' + item.id_invoice + '</center></td>';
+                                html += '<td><center>' + item.date_invoice + '</center></td>';
+                                //html += '<td>' +
+                                //    '<form action="DetailsInvoice" method="post">' +
+                                //    '<input value="' + item.id_invoice + '" type="hidden" name="idinv" /> ' +
+                                //    '<button class="fa fa-eye form-control " style="background:#B0CF31; color: white;"  type="submit"></button>' +
+                                //    '</form>' +
+                                //    '</td>';
+
+                                html += '<td><center><button type="button" class="btn btn-default btn-sm fa fa-upload btn-default" style="background:#7ED957;" data-toggle="modal" data-target="#upload_invoice" onclick="IdtoModal(' + item.idsiixsem_invoice + ')"></button></center></td>';
+
+                                if (item.name_file != "") {
+                                    html += '<td>' +
+                                        '<center><button class="fa  fa-eye btn-sm btn btn-default " style="background:#5CE1E6;"  onclick="Show_IN(' + item.idsiixsem_invoice + ')"></button></center>'
+                                    '</td>';
+                                    html += '<td>' +
+                                        '<form action="Download_Invoice" method="post">' +
+                                        '<input value="' + item.name_file + '" type="hidden" name="name_file" />' +
+                                        '<center><button class="fa  fa-download btn-sm btn btn-default " style="background:#5CE1E6;"  type="submit"></button></center>' +
+                                        '</form>' +
+                                        '</td>';
+                                    html += '</tr>';
+                                    html += '<tr style="display:none; height:500px;" style="display:none;" id="in' + item.idsiixsem_invoice + '">' +
+                                        '<td colspan="5" center><iframe src="/Invoices/' + item.name_file + '" style="width: 100%; height: 500px;" title="CR"></iframe></center></td>';
+                                    html += '</tr>';
+                                }
+                                else {
+                                    html += '<td></td>';
+                                    html += '</tr>';
+                                }
+                            });
+
+                            $('.tbody4').html(html);
+                        },
+
+                    error: function (errormessage) {
+                        //  alertify.error('Upss... Ocurrio un error comunicate al departamento de sistemas ¡Gracias!');
+                    }
+                });
+            }
+            function Add_Invoice() {
+
+                var nofac = $('#NomFac').val();
+                var datefac = $('#dateFac').val();
+
+                $.ajax({
+                    url: "/siixsem_it/Add_Invoice",
+                    type: "POST",
+                    data: {
+                        id_invoice: nofac,
+                        date_invoice: datefac
+                    },
+                    cache: false,
+                    beforeSend:
+                        function (cargando) {
+                        },
+                    success: function (result) {
+                        alertify.notify('¡Se añadio usuario con éxito!', 'success', 3, function () { location.reload(); });
+                    },
+
+                    error: function (errormessage) {
+                        alertify.error('Upss... Ocurrio un error al registrar usuario');
+                    }
+                });
+
+            }
+            function IdtoModal(id_i) {
+                $('.modal-body #sem_id').val(id_i);
+            }
+
+            function UpdateI(id_i) {
+                var id_in = id_i;
+                // Checking whether FormData is available in browser
+                if (window.FormData !== undefined) {
+
+                    var fileUpload = $("#FileUpload1").get(0);
+                    var files = fileUpload.files;
+
+                    // Create FormData object
+                    var fileData = new FormData();
+
+                    // Looping over all files and add it to FormData object
+                    for (var i = 0; i < files.length; i++) {
+                        fileData.append(files[i].name, files[i]);
+                    }
+
+                    // Adding one more key to FormData object
+                    fileData.append('idsiixsem_invoice', id_in);
+
+
+                    $.ajax({
+                        url: '/siixsem_it/UploadInvoice',
+                        type: "POST",
+                        contentType: false, // Not to set any content header
+                        processData: false, // Not to process data
+                        data: fileData,
+                        success: function (result) {
+                            alertify.notify('¡Se subió la factura con éxito!', 'success', 3, function () { location.reload(); });
+                        },
+                        error: function (err) {
+                            alert(err.statusText);
+                            console.log(err);
+                        }
+                    });
+                } else {
+                    alert("FormData is not supported.");
+                }
+            }
+            function fnExcelReport() {
+                var tab_text = "<meta http-equiv='content-type' content='application/vnd.ms-excel; charset=UTF-8'>" +
+                    "<table border='2px'>" + "<tr bgcolor='#5ab8ff'>";
+                var j = 0;
+                tab = document.getElementById('table'); // id of table
+                for (j = 0; j < tab.rows.length; j++) {
+                    tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
+
+                }
+                var ua = window.navigator.userAgent;
+                sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+                return (sa);
+            }
+            function Show_IN(idcr) {
+                const cr = '#in' + idcr;
+                //console.log(`Showning ${cr}`);
+                $(cr).toggle();
+            }
+        </script>
+    </div>
+</body>

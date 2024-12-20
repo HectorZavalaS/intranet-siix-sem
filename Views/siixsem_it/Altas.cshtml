@@ -1,0 +1,207 @@
+﻿<body style="font-family: 'Montserrat', sans-serif; font-size:small;">
+    <div class="container-fluid">
+        <br>
+        <center>
+            <h1>Usuarios </h1>
+            <hr width="50%">
+        </center>
+        <br><br>
+        <div class=" row">
+            <div class="col-sm-1">
+                <center>
+                    <a class="btn btn-default form-control" style="color: white; background: #86CF53;" onclick="fnExcelReport();" id="btnExport">
+                        <span class="fa fa-file-excel-o" width="50%"></span>
+                    </a>
+                </center>
+            </div>
+            <div class="col-sm-1">
+                <center>
+                    <a class="btn btn-default form-control" style="color:white; background:#5ab8ff;">
+                        <span class="fa fa-search" width="50%"></span>
+                    </a>
+                </center>
+            </div>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" id="Search" placeholder="Search" />
+            </div>
+            <div class="col-sm-6">
+
+            </div>
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-primary  fa fa-plus" data-toggle="modal" data-target="#myModal"></button>
+            </div>
+
+        </div>
+        <br><br>
+        <table class="table table-striped" id="table">
+            <thead>
+                <tr class="row_table header" style="color:white; background:#5271FF;">
+                    <th><center>Nombre</center></th>
+                    <th><center>Apellido</center></th>
+                    <th><center>Username</center></th>
+                    <th><center>Tipo de usuario</center></th>
+                    <th><center>Departamento</center></th>
+                    <th><center>Editar</center></th>
+                </tr>
+            </thead>
+            <tbody class="tbody4" style="color:#666666;" id="tabla"></tbody>
+        </table>
+        <!-- The Modal Agregar nuevo Equipo -->
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <center><h4 class="modal-title">Añadir Usuario</h4></center>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <br />
+                                    <center><img src="~/img/user.png" /></center>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="">Primer Nombre</label>
+                                            <input class="form-control" type="text" id="name" />
+                                            <br />
+                                            <label for="">Tipo de usuario</label>
+                                            <select id="model" name="model" class="form-control">
+                                                <option value="Administrador">Administrador</option>
+                                                <option value="Estandar">Estandar</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="">Apellido Paterno</label>
+                                            <input class="form-control" type="text" id="lastname" />
+                                            <br />
+                                            <label for="">Departamento</label>
+                                            <select name="dep" id="dep" class="form-control">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="">contraseña</label>
+                                            <input class="form-control" type="number" id="password" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="">Número de nómina</label>
+                                            <input class="form-control" type="number" id="no_nomi" />
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <br />
+                            
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success butsave" id="butsave" name="butsave" onclick="Add_User()">Save</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- The Modal details -->
+        <div class="modal fade" id="edit_equipment">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content ">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Detalles Equipo</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="datos"></div>
+
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" onclick="Update_equipment()">Save</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+<script >
+    $(document).ready(function () {
+    all_users();
+        Get_departaments();
+   
+
+});
+    /*-------------------------------------USERS-----------------------------------------------*/
+function all_users() {
+    $.ajax({
+
+        url: "/siixsem_it/GetUsers_List",
+        //data: JSON.stringify(empObj),
+        type: "POST",
+        contentType: "application/json;charset=utf-8",
+        dataType: "json",
+        success:
+            function (result) {
+                var html = '';
+                $.each(result, function (key, item) {
+
+                    html += '<tr class="fila row_table" id="fila">';
+                    html += '<td><center>' + item.name + item.lastname+ '</center></td>';
+                    html += '<td><center>' + item.username + '</center></td>';
+                    html += '<td><center>' + item.type_user + '</center></td>';
+                    html += '<td><center>' + item.name_dep + '</center></td>';
+                    html += '<td><button type="button" class="btn btn-default  fa fa-pencil" data-toggle="modal" data-target="#edit_equipment" style="background:#ffde59; " onclick="return getbyID_Details_E(' + item.id + ')"></button></td>';
+
+                    html += '</tr>';
+                });
+
+                $('.tbody4').html(html);
+            },
+
+        error: function (errormessage) {
+            //  alertify.error('Upss... Ocurrio un error comunicate al departamento de sistemas ¡Gracias!');
+        }
+    });
+    }
+    function Get_departaments() {
+         console.log("dEPARTAMENTOS");
+        $.ajax({
+            //data: { id_description_equipment: id_description_equipment },
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json; charset=uft-8",
+
+            url: "/siixsem_it/List_Departamens",
+            success: function (data) {
+                for (u in data) {
+                    $("#dep").append("<option value=" + data[u].iddep + ">" + data[u].name_dep + "</option>");
+
+                }
+
+            },
+            error: function (result) {
+                alert(result);
+            }
+        });
+    }
+</script>

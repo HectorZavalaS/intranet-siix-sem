@@ -1,0 +1,827 @@
+﻿
+@{
+    ViewBag.Title = "Detalles Solicitud Hardware";
+}
+<br />
+<br />
+<center><h2>Detalles Solicitud Hardware</h2></center>
+<br />
+<br />
+<input type="hidden" class="form-control" id="id" style="background:#e9ecef;" value="@ViewBag.id" />
+<input type="hidden" class="form-control" id="id_user_solicitante" style="background:#e9ecef;" value="@ViewBag.id_user_solicitante" />
+
+<div class="row1">
+
+</div>
+<br />
+<center><h4>Equipos Prestados</h4></center>
+<hr style="background-color: #dc3545;  width:5%;  border-width: 2px; color: white;" />
+<br />
+<br />
+<table class="table table-hover" id="tabla_2" style="text-align:center">
+    <thead style="background: #60B8D4; color: #FFFFFF; ">
+        <tr>
+            <th scope="col">ID-SEM</th>
+            <th scope="col">Dispositivo</th>
+            <th scope="col">Marca</th>
+            <th scope="col">Modelo</th>
+            <th scope="col">Serial</th>
+            <th scope="col">Comentarios</th>
+            <th scope="col">Estatus</th>
+            <th scope="col">Detalles</th>
+        </tr>
+    </thead>
+    <tbody class="tbody" style="color:#666666;" id="tbody">
+        <tr class="fila row_table" id="fila">
+        </tr>
+    </tbody>
+</table>
+<div class="row">
+    <div class="col-lg-4"></div>
+    <div class="col-lg-4"></div>
+    <div class="col-lg-4">
+        <center>
+            <h5>Asignar equipo</h5>
+            <button type="button" class="btn btn-primary  fa fa-plus" data-toggle="modal" data-target="#myModal"></button>
+        </center>
+    </div>
+</div>
+<!--div class="row">
+    <div class="col-sm-12">
+        <center>
+            <div class="table100">
+                <div class="wrap-table100">
+                    <table class="table">
+                        <thead>
+                            <tr class="row_table header" style="color: white; background: #8572C6; font-size: 15px; ">
+                                <th> <center># Responsiva </center></th>
+                                <th> <center>Identificador </center></th>
+                                <th> <center>Tipo de dispositivo </center> </th>
+                                <th> <center>Marca </center> </th>
+                                <th> <center>No. Serie </center> </th>
+                                <th> <center>Estatus </center> </th>
+                                <th> <center>Generar PDF </center> </th>
+                                <th> <center>Carga de Archivos </center> </th>
+                                <th> <center>Descarga de CR </center> </th>
+                                <th> <center>Cancelar CR </center> </th>
+                            </tr>
+                        </thead>
+                        <bold>
+                            <tbody class="tbody5" style="color:#666666;  font-size:15px;"></tbody>
+                        </bold>
+                    </table>
+                </div>
+            </div>
+        </center>
+    </div>
+</div-->
+<!-- The Modal details -->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content ">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Asignación Equipo</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+
+                        <table class="table" id="tabla">
+                            <thead>
+                                <tr class="row_table header" style="color:white; background:#dc3545;  font-size:15px;">
+                                    <th> <center>Equipo </center>
+                                </tr>
+                            </thead>
+                            <bold>
+                                <tbody class="tb" id="tb" style="color:#666666;  font-size:15px;">
+
+                                    <tr><td><input type="hidden" name="input_newid" id="input_newid" /><input type="hidden" class="form-control" id="idM" style="background:#e9ecef;" value="@ViewBag.id" /><select name="equip0" id="equip0" class="form-control myselect" data-show-subtext="true" data-live-search="true" required><option value="0">--Selecciona--</option></select></td></tr>
+                                </tbody>
+                            </bold>
+                        </table>
+
+                        <button for="e9" type="button" class="btn btn-success" id="btnSend">+</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" onclick="Save_Responsive()">Save</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<!-- The Modal upload file -->
+<div class="modal fade" id="upload_respl">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content ">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Cargar Archivo</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row">
+                    <table class="table">
+                        <thead>
+                            <tr class="row_table header" style="color: white; background: #8572C6; font-size: 15px; ">
+                                <th> <center>Carga de archivo </center></th>
+                            </tr>
+                        </thead>
+                        <bold>
+                            <tbody class="tbody6" style="color:#666666;  font-size:15px;">
+                                <tr>
+                                    <td>
+                                        <center>
+                                            @{ using (Html.BeginForm("Get_DetailsR", "siixsem_it", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                                {
+                                                    <input type="file" name="file" id="file" />
+                                                    <input type="hidden" name="id_usuario" id="id_usuario" value="@ViewBag.id" />
+                                                    <input type="hidden" name="identificador" id="identificador" />
+                                                    <input type="hidden" name="id_equipo" id="id_equipo" />
+                                                    <input type="hidden" class="form-control" name="id" style="background:#e9ecef;" value="@ViewBag.id" />
+                                                    <input type="hidden" class="form-control" name="name" style="background:#e9ecef;" value="@ViewBag.name" />
+                                                    <input type="hidden" class="form-control" name="ape" style="background:#e9ecef;" value="@ViewBag.ape" />
+                                                    <input type="hidden" class="form-control" name="name_dep" style="background:#e9ecef;" value="@ViewBag.name_dep" />
+                                                    <input type="submit" class="fa fa-upload btn-sm btn btn-success " style="font-family: 'Montserrat', sans-serif; font-size:small;" onclick="Upload" value="Subir" />
+                                                }
+                                            }
+                                        </center>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </bold>
+                    </table>
+                </div>
+
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<!-- The Modal details -->
+<div class="modal fade" id="edit_M">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content ">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Detalles Equipo</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="datos"></div>
+
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" onclick="Update()">Save</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<!--div class="container">
+    <div class="form"></div>
+    <br />
+    <center><b>Equipos</b></center>
+    <br />
+    <table class="table table-hover" id="tabla_1" style="text-align:center">
+        <thead style="background: #60B8D4; color: #FFFFFF; ">
+            <tr>
+                <th scope="col">Dispositivo</th>
+                <th scope="col">Asignar</th>
+            </tr>
+        </thead>
+        <tbody class="tb" id="tb" style="color:#666666;  font-size:15px;">
+
+            <tr><td><input type="hidden" name="input_newid" id="input_newid" /><input type="hidden" class="form-control" id="idM" style="background:#e9ecef;" value="@ViewBag.id" /><select name="select" id="select" class="form-control select" data-show-subtext="true" data-live-search="true" required><option value="0">--Selecciona--</option></select></td></tr>
+        </tbody>
+    </table>
+</!--div>
+
+<table class="table" id="tabla">
+    <thead>
+        <tr class="row_table header" style="color:white; background:#dc3545;  font-size:15px;">
+            <th> <center>Equipo </center>
+        </tr>
+    </thead>
+    <bold>
+        <tbody class="tb" id="tb" style="color:#666666;  font-size:15px;">
+        </tbody>
+    </bold>
+</table>
+
+
+<!--script>
+    $(document).ready(function () {
+        //    Detalles_hardware_loan();
+        Get_EquipDisp();
+
+    });
+
+    function Get_EquipDisp() {
+        // console.log(DATOS);
+        $.ajax({
+            //data: { id_description_equipment: id_description_equipment },
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json; charset=uft-8",
+
+            url: "/siixsem_it/List_EquipD",
+            success: function (data) {
+                /*console.log(data);
+                for (u in data) {
+                    $("#equip0").append("<option value=" + data[u].id + ">" + data[u].code_description + " " + data[u].e_name + "-" + data[u].id_eq + "</option>");
+
+                }*/
+                var html = '';
+                $.each(data, function (key, item) {
+                    html += '<option>' + item.data + '</option>';
+                });
+                $('.select').html(html);
+            },
+            error: function (result) {
+                alert(result);
+            }
+        });
+    }
+
+
+    function Encabezado() {
+        var id = $('#id').val();
+        var id_user_solicitante = $('#id_user_solicitante').val();
+        $.ajax({
+            url: "/siixsem_it/DetailR_",
+            type: "POST",
+            data: {
+                ide: id,
+                iddetails: id_user_solicitante,
+                id_eq: 0
+            },
+            cache: false,
+            beforeSend:
+                function (cargando) {
+                },
+            success:
+                function (result) {
+                    var html = '';
+                    $.each(result, function (key, item) {
+                        $("#tabla_1").hide();
+                        html += '<div class="row">';
+                        html += '<div class="col-sm-3"><center><b><p>Usuario que solicito</p></b>' + item.id_user_solicitante + '</center></div>';
+                        html += '<div class="col-sm-3"><center><b><p>Usuario que presto de IT</p></b>' + item.id_user_presto_it + '</center></div>';
+                        html += '<div class="col-sm-3"><center><b><p>Usuario que entrego</p></b>' + item.id_user_entrega + '</center></div>';
+                        html += '<div class="col-sm-3"><center><b><p>Usuario que recibio de IT</p></b>' + item.id_user_recibio_it + '</center></div>';
+                        html += '</div>';
+                        html += '<div class="row">';
+                        html += '<div class="col-sm-3"><center><b><p>Fecha que solicito</p></b>' + item.fecha_que_solicitan + '</center></div>';
+                        html += '<div class="col-sm-3"><center><b><p>Fecha requerida</p></b>' + item.fecha_requerida + '</center></div>';
+                        html += '<div class="col-sm-3"><center><b><p>Fecha de prestamo</p></b>' + item.fecha_que_se_presta + '</center></div>';
+                        html += '<div class="col-sm-3"><center><b><p>Fecha que se entregan a IT</p></b>' + item.fecha_que_entregan + '</center></div>';
+                        html += '</div>';
+                    });
+                    $('.form').html(html);
+
+
+
+                },
+
+            error: function (errormessage) {
+                alertify.error('Upss... Ocurrio un error comunicate al departamento de IT ¡Gracias!');
+            }
+        });
+
+    }
+    function Detalles_hardware_loan() {
+        var id = $('#id').val();
+        var id_user_solicitante = $('#id_user_solicitante').val();
+        $.ajax({
+            url: "/siixsem_it/DetailR_",
+            type: "POST",
+            data: {
+                ide: id,
+                iddetails: id_user_solicitante
+            },
+            cache: false,
+            beforeSend:
+                function (cargando) {
+                },
+            success:
+                function (result) {
+                    var html = '';
+                    var html2 = '';
+                    if (result.length > 1) {
+                        $.each(result, function (key, item) {
+                            $("#tabla_1").hide();
+
+                            Encabezado();
+
+                            html2 += '<tr class="fila row_table" id="fila">';
+                            html2 += '<td><center>' + item.code_name + "-" + item.id_eq + '</center></td>';
+                            html2 += '<td><center>' + item.cod_description + '</center></td>';
+                            html2 += '<td><center>' + item.name_trademark + '</center></td>';
+                            html2 += '<td><center>' + item.name_model + '</center></td>';
+                            html2 += '<td><center>' + item.series + '</center></td>';
+                            html2 += '<td><center>' + item.comments + '</center></td>';
+                            html2 += '</tr>';
+                        });
+                        $('.form').html(html);
+                        $('.tbody').html(html2);
+                    } else {
+                        $("#tabla_2").hide();
+                        $.each(result, function (key, item) {
+                            html += '<div class="row">';
+                            html += '<div class="col-sm-3"><center><b><p>Usuario que solicito</p></b>' + item.id_user_solicitante + '</center></div>';
+                            html += '<div class="col-sm-3"><center><b><p>Usuario que presto de IT</p></b>' + item.id_user_presto_it + '</center></div>';
+                            html += '<div class="col-sm-3"><center><b><p>Usuario que entrego</p></b>' + item.id_user_entrega + '</center></div>';
+                            html += '<div class="col-sm-3"><center><b><p>Usuario que recibio de IT</p></b>' + item.id_user_recibio_it + '</center></div>';
+                            html += '</div>';
+                            html += '<div class="row">';
+                            html += '<div class="col-sm-3"><center><b><p>Fecha que solicito</p></b>' + item.fecha_que_solicitan + '</center></div>';
+                            html += '<div class="col-sm-3"><center><b><p>Fecha requerida</p></b>' + item.fecha_requerida + '</center></div>';
+                            html += '<div class="col-sm-3"><center><b><p>Fecha de prestamo</p></b>' + item.fecha_que_se_presta + '</center></div>';
+                            html += '<div class="col-sm-3"><center><b><p>Fecha que se entregan a IT</p></b>' + item.fecha_que_entregan + '</center></div>';
+                            html += '</div>';
+                            for (j = 0; j < item.laptop; j++) {
+                                let i = j + 1;
+                                html2 += '<tr class="fila row_table" id="fila_laptop">';
+                                html2 += '<th><center>Computadora ' + i + '</center></th>';
+                                html2 += '<th><center><select name="equip' + j + '" id="equip' + j + '" class="form-control myselect" data-show-subtext="true" data-live-search="true" required><option value="0">--Selecciona--</option></select></center></th>';
+                                html2 += '</tr>';
+                            }
+                            for (j = 0; j < item.escanners; j++) {
+                                let i = j + 1;
+                                html2 += '<tr class="fila row_table" id="fila_escanner" style="background:#D7DAFF;">';
+                                html2 += '<th><center>Escanner ' + i + '</center></th>';
+                                html2 += '<th><center><select><option>Seleciona escanner</option></select></center></th>';
+                                html2 += '</tr>';
+                            }
+                            for (j = 0; j < item.impresoras; j++) {
+                                let i = j + 1;
+                                html2 += '<tr class="fila row_table" id="fila_impresora">';
+                                html2 += '<th><center>Impresora ' + i + '</center></th>';
+                                html2 += '<th><center><select><option>Seleciona impresora</option></select></center></th>';
+                                html2 += '</tr>';
+                            }
+                            Get_EquipDisp(item.laptop, item.escanners, item.impresoras);
+
+                        });
+                        $('.form').html(html);
+                        $('.tbody_i').html(html2);
+                    }
+
+
+                },
+
+            error: function (errormessage) {
+                alertify.error('Upss... Ocurrio un error comunicate al departamento de IT ¡Gracias!');
+            }
+        });
+
+    }
+    function Get_EquipDisp(numero1, numero2, numero3) {
+        var resultado = numero1 + numero2 + numero3;
+
+        for (j = 0; j < resultado; j++) {
+            console.log(j);
+            $.ajax({
+                //data: { id_description_equipment: id_description_equipment },
+                dataType: "json",
+                type: "POST",
+                contentType: "application/json; charset=uft-8",
+                url: "/siixsem_it/List_EquipD",
+                success: function (data) {
+                    for (u in data) {
+                        $("#equip" + j + "").append("<option value=" + data[u].id + ">" + data[u].code_description + " " + data[u].e_name + "-" + data[u].id_eq + "</option>");
+
+                    }
+
+                },
+                error: function (result) {
+                    //   alert(result);
+                }
+            });
+        }
+    }
+</script-->
+
+<script src="~/Scripts/select2.js"></script>
+<script>
+    $(document).ready(function () {
+        all_responsives();
+        Get_EquipDisp();
+        Detalles_hardware_loan();
+        Detalles_hardware_loan_();
+    });
+    /*-------------------------------------USERS-----------------------------------------------*/
+    function all_responsives() {
+        var id = $('#id').val();
+        $.ajax({
+            url: "/siixsem_it/DetailR",
+            type: "POST",
+            data: {
+                id: id
+            },
+            cache: false,
+            beforeSend:
+                function (cargando) {
+                },
+            success:
+                function (result) {
+                    var html = '';
+                    $.each(result, function (key, item) {
+
+                        html += '<tr class="fila row_table" id="fila">';
+                        html += '<td><center><input value = "' + item.newide + '" type = "hidden" name = "id" />' + item.ide + '</center></td>';
+                        html += '<td><center>' + item.e_name + "-" + item.id_eq + '</center></td>';
+                        html += '<td><center>' + item.cod_description + '</center></td>';
+                        html += '<td><center>' + item.brand + '</center></td>';
+                        html += '<td><center>' + item.series + '</center></td>';
+                        html += '<td><center>' + item.e_status + '</center></td>';
+                        html += '<td>' +
+                            '<form action="PDF_Responsive" method="post">' +
+                            '<input value="' + id + '" type="hidden" name="id" />' +
+                            '<input value="' + item.ide + '" type="hidden" name="identificador" />' +
+                            '<center><button class="fa fa-file-pdf-o btn-sm btn btn-default " style="background:#FF5757; color:#fff;"   type="submit"></button></center>' +
+                            '</form>' +
+                            '</td>';
+                        //html += '<td>' + '<center> <button type="button" class="btn btn-primary  fa fa-plus" data-toggle="modal" data-target="#myModal"></button></center>' + '</td>'; html += '<td><center><button type="button" class="btn btn-default btn-sm fa fa-upload btn-default" style="background:#7ED957;" data-toggle="modal" data-target="#upload_respl"  onclick="Upload_PDF(' + item.id + "," + item.ide + ')"></button></center></td>';
+                        html += '<td><center><button type="button" class="btn btn-default btn-sm fa fa-upload btn-default" style="background:#7ED957;" data-toggle="modal" data-target="#upload_respl"  onclick="Upload_PDF(' + item.id + "," + item.ide + ')"></button></center></td>';
+
+                        if (item.name_file != "") {
+                            html += '<td>' +
+                                '<form action="Dowland_Responsive" method="post">' +
+                                '<input value="' + item.name_file + '" type="hidden" name="name_file" />' +
+                                '<center><button class="fa  fa-download btn-sm btn btn-default " style="background:#5CE1E6;"   type="submit"></button></center>' +
+                                '</form>' +
+                                '</td>';
+                            html += '<td><center><button class="fa fa-window-close btn-sm btn btn-default " style="background:#FF5757; color:#fff;"  onclick="Cancel_CR(' + item.id + "," + item.ide + "," + item.id_eq + ')" type="submit"></button></center></td>';
+
+                        } else {
+                            html += '<td></td>';
+                            html += '<td></td>';
+                        }
+
+                        html += '</tr>';
+                        open_M(item.newide);
+                    });
+
+                    $('.tbody5').html(html);
+                },
+
+            error: function (errormessage) {
+                alertify.error('Upss... Ocurrio un error comunicate al departamento de IT ¡Gracias!');
+            }
+        });
+
+    }
+
+    function Get_EquipDisp() {
+        // console.log(DATOS);
+        $.ajax({
+            //data: { id_description_equipment: id_description_equipment },
+            dataType: "json",
+            type: "POST",
+            contentType: "application/json; charset=uft-8",
+
+            url: "/siixsem_it/List_EquipD",
+            success: function (data) {
+                for (u in data) {
+                    $("#equip0").append("<option value=" + data[u].id + ">" + data[u].code_description + " " + data[u].e_name + "-" + data[u].id_eq + "</option>");
+
+                }
+
+            },
+            error: function (result) {
+                alert(result);
+            }
+        });
+    }
+    $('#btnSend').click(function () {
+        var yea = document.getElementById("tb").rows.length;
+        var DATOS = { Contador: yea };
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=uft-8",
+            data: "{conta:" + JSON.stringify(DATOS) + "}",
+            url: "/siixsem_it/newline",
+            success: function (data) {
+                //alert( document.getElementsByClassName("ctn").length);
+                $("#tabla").append(data);
+            },
+            error: function (result) {
+                alert("error");
+            }
+        })
+    });
+
+    function Save_Responsive() {
+        var yea = document.getElementById("tb").rows.length;
+
+
+        for (i = 0; i < yea; i++) {
+            var id_eq = $('#equip' + i).val();
+            var id = $('#idM').val();
+            var newidM = $('#input_newid').val();
+            var id = $('#id').val();
+            var id_user_solicitante = $('#id_user_solicitante').val();
+            $.ajax({
+                url: "/siixsem_it/add_responsiveuser",
+                type: "POST",
+                data: {
+                    id_eq: id_eq,
+                    id: id,
+                    newide: newidM,
+                    id_user_solicitante: id_user_solicitante
+                },
+                cache: false,
+                beforeSend:
+                    function (cargando) {
+                        //$("#loader").show();
+                        //document.getElementById("btnAdd").disabled = true;
+                    },
+                success: function (result) {
+                    //$("#loader").hide();
+                    alertify.notify('¡Se asigno dispositivo al usuario con éxito!', 'success', 3, function () { location.reload(); });
+                    /*document.getElementById("btnAdd").disabled = false;
+                    Cargar_Datos();
+                    clearTextBox();
+                    Cargar_Datos();*/
+                },
+
+                error: function (errormessage) {
+                    alertify.error('Upss... Ocurrio un error al asignar el equipo');
+                    //document.getElementById("btnAdd").disabled = false;
+                }
+            });
+        }
+    }
+
+
+    function open_M(newide) {
+        $("#input_newid").val(newide);
+    }
+    function Upload_PDF(id, ide) {
+        $("#id_equipo").val(id);
+        $("#identificador").val(ide);
+        console.log("id_equipo" + id);
+        console.log("id_usuario" + $("#id").val());
+        console.log("identificador" + ide);
+    }
+    function Cancel_CR(id, ide, sem) {
+        var id_equipo = id;
+        var sem = sem;
+        var identificador_responsiva = ide;
+        var id_usuario = $('#id').val();
+
+        $.ajax({
+            url: "/siixsem_it/cancel_responsive",
+            type: "POST",
+            data: {
+                id: id_equipo,
+                id_eq: sem,
+                ide: identificador_responsiva,
+                username: id_usuario
+            },
+            cache: false,
+            beforeSend:
+                function (cargando) {
+                    //$("#loader").show();
+                    //document.getElementById("btnAdd").disabled = true;
+                },
+            success: function (result) {
+                //$("#loader").hide();
+                alertify.notify('¡Se cancelo carta responsiva con éxito!', 'success', 3, function () { location.reload(); });
+                /*document.getElementById("btnAdd").disabled = false;
+                Cargar_Datos();
+                clearTextBox();
+                Cargar_Datos();*/
+            },
+
+            error: function (errormessage) {
+                alertify.error('Upss... Ocurrio un error al cancelar la carta responsiva comunicate al departamento de IT ¡Gracias!');
+                //document.getElementById("btnAdd").disabled = false;
+            }
+        });
+    }
+
+
+    function Detalles_hardware_loan() {
+        var id = $('#id').val();
+        var id_user_solicitante = $('#id_user_solicitante').val();
+        $.ajax({
+            url: "/siixsem_it/DetailR_",
+            type: "POST",
+            data: {
+                ide: id,
+                iddetails: id_user_solicitante
+            },
+            cache: false,
+            beforeSend:
+                function (cargando) {
+                },
+            success:
+                function (result) {
+                    var html = '';
+                    var html2 = '';
+                    $.each(result, function (key, item) {
+                        html2 += '<tr class="fila row_table" id="fila">';
+                        html2 += '<td><center>' + item.code_name + "-" + item.id_eq + '</center></td>';
+                        html2 += '<td><center>' + item.cod_description + '</center></td>';
+                        html2 += '<td><center>' + item.name_trademark + '</center></td>';
+                        html2 += '<td><center>' + item.name_model + '</center></td>';
+                        html2 += '<td><center>' + item.series + '</center></td>';
+                        html2 += '<td><center>' + item.comments + '</center></td>';
+                        html2 += '<td><center>' + item.e_status + '</center></td>';
+                        html2 += '<td><button type="button" class="btn btn-default  fa fa-pencil" data-toggle="modal" data-target="#edit_M" style="background:#ffde59; " onclick="return getbyID_Details_E(' + item.id + ')"></button></td>';
+                        html2 += '</tr>';
+                    });
+                    $('.tbody').html(html2);
+                },
+
+            error: function (errormessage) {
+                alertify.error('Upss... Ocurrio un error comunicate al departamento de IT ¡Gracias!');
+            }
+        });
+    }
+    function Detalles_hardware_loan_() {
+        var id = $('#id').val();
+        var id_user_solicitante = $('#id_user_solicitante').val();
+        $.ajax({
+            url: "/siixsem_it/Get_Hardware_loan",
+            type: "POST",
+            data: {
+                ide: id,
+                iddetails: id_user_solicitante
+            },
+            cache: false,
+            beforeSend:
+                function (cargando) {
+                },
+            success:
+                function (result) {
+                    var html = '';
+                    $.each(result, function (key, item) {
+                        html += '<div class="row">';
+                        html += '<div class="col-sm-3"><center><b><p>Usuario que solicito</p></b>' + item.id_user_solicitante + '</center></div>';
+                        html += '<div class="col-sm-3"><center><b><p>Usuario que presto de IT</p></b>' + item.id_user_presto_it + '</center></div>';
+                        html += '<div class="col-sm-3"><center><b><p>Usuario que entrego</p></b>' + item.id_user_entrega + '</center></div>';
+                        html += '<div class="col-sm-3"><center><b><p>Usuario que recibio de IT</p></b>' + item.id_user_recibio_it + '</center></div>';
+                        html += '</div>';
+                        html += '<div class="row">';
+                        html += '<div class="col-sm-3"><center><b><p>Fecha que solicito</p></b>' + item.fecha_que_solicitan + '</center></div>';
+                        html += '<div class="col-sm-3"><center><b><p>Fecha requerida</p></b>' + item.fecha_requerida + '</center></div>';
+                        html += '<div class="col-sm-3"><center><b><p>Fecha de prestamo</p></b>' + item.fecha_que_se_presta + '</center></div>';
+                        html += '<div class="col-sm-3"><center><b><p>Fecha que se entregan a IT</p></b>' + item.fecha_que_entregan + '</center></div>';
+                        html += '</div>';
+                    });
+                    $('.row1').html(html);
+                },
+
+            error: function (errormessage) {
+                alertify.error('Upss... Ocurrio un error comunicate al departamento de IT ¡Gracias!');
+            }
+        });
+    }
+
+    function getbyID_Details_E(id) {
+        console.log(id);
+        var id_hl = $('#id').val();
+        var id_user_solicitante = $('#id_user_solicitante').val();
+        $.ajax({
+            url: "/siixsem_it/DetailEquip_A/",
+            type: "GET",
+            data: {
+                id: id_hl,
+                id_user_solicitante: id_user_solicitante,
+                id_eq: id
+            },
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            success:
+                function (result) {
+                    var html = '';
+                    var cont = 0;
+                    $.each(result, function (key, item) {
+
+                        html += '<center>' +
+                            '<div class="row">' +
+                            '<div class="col-sm-4">' +
+                            '<h6>Nombre Equipo</h6>' +
+                            '<input type="hidden" id="idModal" class="form-control" value="' + item.id + '" readonly />' +
+                            '<input type="text" id="id_eq" class="form-control" value="' + item.code_name + "-" + item.id_eq + '" readonly />' +
+                            '</div>' +
+                            '<div class="col-sm-4">' +
+                            '<h6>Serial</h6>' +
+                            '<input type="text"  class="form-control" value="' + item.series + '" readonly />' +
+                            '</div>' +
+                            '<div class="col-sm-4">' +
+                            '<h6>Tipo Equipo</h6>' +
+                            '<input type="text"  class="form-control" value="' + item.cod_description + '" readonly />' +
+                            '</div>' +
+                            '</div>';
+                        html += '<div class="row">' +
+                            '<div class="col-sm-4">' +
+                            '<h6>Marca</h6>' +
+                            '<input type="text" class="form-control" value="' + item.name_trademark + '" readonly />';
+                        html += '</div>' +
+                            '<div class="col-sm-4">' +
+                            '<h6>Modelo</h6>' +
+                            '<input type="text"  class="form-control" value="' + item.name_model + '"  readonly/>' +
+                            '</div>' +
+                            '<div class="col-sm-4">' +
+                            '<h6>Estatus</h6>' +
+                            '<select id="estatus_M" class="form-control">' +
+                            '<option value = "' + item.e_status + '" >' + item.e_status + '</option >';
+                        switch (item.e_status) {
+                            case ("Entregado"):
+                                html += '<option value = "Prestado" >Prestado</option >';
+                                break;
+                            case ("Prestado"):
+                                html += '<option value = "Entregado" >Entregado</option >';
+                                break;
+
+                            default:
+                                html += '<option value = "Entregado" >Entregado</option >' +
+                                    '<option value = "Prestado" >Prestado</option >';
+                                break;
+                        }
+
+                        html += '</select >'+
+                            '</div>' +
+                            '</div>';
+                        html += '<div class="row">' +
+                            '<div class="col-sm-12">' +
+                            '<h6>Comentarios</h6>' +
+                            '<input type="text" id="comentarios_M" class="form-control" value="' + item.comments + '"  />' +
+                            '</div>';
+                            html += '</div>';
+                            '</center>';
+
+
+                    });
+                    $('.datos').html(html);
+                },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+        return false;
+    }
+
+    function Update() {
+        var id = $('#idModal').val();
+        var status = $('#estatus_M').val();
+        var comments = $('#comentarios_M').val();
+
+        $.ajax({
+            url: "/siixsem_it/update_details_load_hardware",
+            type: "POST",
+            data: {
+                id: id,
+                comments: comments,
+                e_status: status
+            },
+            cache: false,
+            beforeSend:
+                function (cargando) {
+                },
+            success: function (result) {
+                alertify.notify('¡Se actualizo información del dispositivo en el inventario con éxito!', 'success', 3, function () { location.reload(); });
+
+            },
+
+            error: function (errormessage) {
+                alertify.error('Upss... Ocurrio un error comunicate al departamento de IT ¡Gracias!');
+            }
+        });
+    }
+</script>
